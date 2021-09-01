@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
             }
         }
     }
-    if (count == argc) {
+    if (argc == count + 1) {
         ls(".", aPresent, lPresent, RPresent);
         return 0;
     }

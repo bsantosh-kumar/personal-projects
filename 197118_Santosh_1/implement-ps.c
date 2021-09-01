@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#define FORMAT "%5s %s\t%8s %s\n"
+#define FORMAT "%5s %10s\t%8s %s\n"
 
 int main(int argc, char** argv) {
     struct dirent* d;
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
         sprintf(currPath, "/proc/%s/fd/0", d->d_name);
         fdCurr = open(currPath, O_RDONLY);
         ttyCurr = ttyname(fdCurr);
-        if (ttyCurr && strcmp(ttyCurr, ttySelf) == 0) {
+        if (1) {
             sprintf(statFile, "/proc/%s/stat", d->d_name);
             currStat = fopen(statFile, "r");
             fscanf(currStat, "%d%s%c%c%c", &pid, processName, &flag, &flag, &flag);
@@ -58,7 +58,12 @@ int main(int argc, char** argv) {
             char pidString[256];
             sprintf(pidString, "%d", pid);
             processName[strlen(processName) - 1] = '\0';
-            printf(FORMAT, pidString, ttyCurr + 5, currTime, processName + 1);
+            if (ttyCurr)
+                printf(FORMAT, pidString, ttyCurr + 5, currTime, processName + 1);
+            else
+                printf(FORMAT, pidString, "?", currTime, processName + 1);
+
+            // printf("%s here \n", d->d_name);
             fclose(currStat);
         }
         close(fdCurr);
