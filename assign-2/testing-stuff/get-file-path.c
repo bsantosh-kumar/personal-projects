@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
         sprintf(currItem, "%s/%s", token, commandName);
         int exists = stat(currItem, &buffer);
         if (exists == 0 && (S_IFREG & buffer.st_mode)) {
-            printf("%s exists here\n");
+            printf("%s exists here\n", currItem);
             return 0;
         }
         token = strtok(NULL, ":");

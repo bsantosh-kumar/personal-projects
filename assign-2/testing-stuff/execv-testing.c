@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include <unistd.h>
 int main() {
-    char *argv[] = {"ls", "-l", NULL};
-    int fd = open("file1.txt", O_WRONLY);
-    dup2(fd, STDOUT_FILENO);
+    char *argv[] = {"ls", "..", "-R", NULL};
     int child = fork();
     int x;
     if (child == 0) {
+        printf("Camer here\n");
         x = execvp("ls", argv);
         printf("x=%d \n", x);
     } else

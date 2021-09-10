@@ -1,8 +1,10 @@
 #include <errno.h>
 #include <linux/limits.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #define max(a, b) \
     ({ __typeof__ (a) _a = (a); \
@@ -44,10 +46,11 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     if ((*allWords)) free(*allWords);
     (*allWords) = NULL;
     (*argumentsLength) = 0;
-    (*allWords) = (char **)calloc(countNoOfWords, sizeof(char *));
+    (*allWords) = (char **)calloc(countNoOfWords + 1, sizeof(char *));
     for (int i = 0; i < countNoOfWords; i++) {
         (*allWords)[i] = (char *)calloc(maxLenWord + 1, sizeof(char));
     }
+    (*allWords)[countNoOfWords] = NULL;
     char *savePointer2 = NULL;
     word = strtok_r(savedInput2, deLimit, &savePointer2);
     int index = 0;
@@ -59,7 +62,6 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
         for (int i = 0; i < currLen; i++) {
             (*allWords)[index][i] = word[i];
         }
-        printf("word: %s", word);
         (*allWords)[index][currLen] = '\0';
         word = strtok_r(NULL, deLimit, &savePointer2);
         index++;
@@ -67,6 +69,58 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     printf("\n");
     (*argumentsLength) = countNoOfWords;
     return;
+}
+bool checkIfFile(char *path) {
+    struct stat buffer;
+    int exists = stat(path, &buffer);
+    if (exists == 0 && (S_IFREG & buffer.st_mode)) {
+        return 1;
+    }
+    return 0;
+}
+void checkInCurrDir(char *commandName, char **filePath) {
+    if (checkIfFile(commandName)) {
+        char *temp = NULL;
+        filePath = realpath(commandName, (temp));
+    }
+    return;
+}
+void checkInPATH(char *commandName, char **filePath) {
+    char *tempPath = getenv("PATH");
+    char *fullPath = (char *)calloc(strlen(tempPath), sizeof(char));
+    strcpy(fullPath, tempPath);
+    char *token = strtok(fullPath, ":");
+    struct stat buffer;
+    while (token != NULL) {
+        char *currItem = (char *)calloc(strlen(commandName) + strlen(token), sizeof(char));
+        sprintf(currItem, "%s/%s", token, commandName);
+        if (checkIfFile(currItem)) {
+            char *temp = NULL;
+            (*filePath) = realpath(currItem, (temp));
+
+            return;
+        }
+        token = strtok(NULL, ":");
+    }
+    return;
+}
+void getActualPath(char *commandName, char **filePath) {
+    checkInCurrDir(commandName, filePath);
+    if ((*filePath) != NULL) return;
+    checkInPATH(commandName, filePath);
+
+    return;
+}
+void createChild(char *filePath, char **allWords, int argumentLength) {
+    int childPID = fork();
+    if (childPID == 0) {
+        printf("filePath=%s\n", filePath);
+        int onError = execvp(filePath, allWords);
+        printf("Error occured\n");
+        exit(0);
+    } else {
+        wait();
+    }
 }
 int main() {
     printWelcome();
@@ -90,15 +144,15 @@ int main() {
             printf("%s\n", allWords[i]);
         }
         printf("\n");
-        if (realpath(allWords[0], absolutePath) != NULL) {  //this function is used to get the absolute path
-            if (strcmp(allWords[0], absolutePath) == 0) {   //If this is true then given argument is itself absolute path
-                printf("%s is the absolute path \n", allWords[0]);
-            } else {
-                printf("%s is not the absolute path\nThe absolute path is: %s\n", allWords[0], absolutePath);
-            }
-        } else {
-            printf("some error occured %d\n", errno);  //some error might occur like did not find, access not given
+        char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
+        strcpy(commandName, allWords[0]);
+        char *filePath = NULL;
+        getActualPath(commandName, &filePath);
+        if (filePath == NULL) {
+            printf("Command %s not found\n", commandName);
+            continue;
         }
         printf("\n");
+        createChild(filePath, allWords, argumentLength);
     }
 }
