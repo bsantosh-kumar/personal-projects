@@ -13,7 +13,7 @@
 void printWelcome() {
     printf("WELCOME TO THE COMMAND INTERPRETER\n\n\n");
 }
-void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsLength) {
+void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsLength, char *delimiter) {
     char *word;
     char *savePointer1 = NULL;
     /*
@@ -25,7 +25,7 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     strcpy(savedInput1, input);
     strcpy(savedInput2, savedInput1);
     savedInput1[len] = savedInput2[len] = '\0';
-    char deLimit[3] = " \t\n";
+    char *deLimit = delimiter;
     word = strtok_r(savedInput1, deLimit, &savePointer1);
     int countNoOfWords = 0;
     int maxLenWord = 0;
@@ -111,48 +111,88 @@ void getActualPath(char *commandName, char **filePath) {
 
     return;
 }
-void createChild(char *filePath, char **allWords, int argumentLength) {
+void createChild(char *filePath, char **allWords, int argumentLength, int index, int p[][2], int pipesLength) {
     int childPID = fork();
     if (childPID == 0) {
-        printf("filePath=%s\n", filePath);
-        int onError = execvp(filePath, allWords);
+        printf("filePath=%s index=%d\n", filePath, index);
+        close(p[index][1]);
+        if (index != 0) {
+            dup2(p[index][0], STDIN_FILENO);
+        }
+        if (index + 1 != pipesLength) {
+            dup2(p[index + 1][1], STDOUT_FILENO);
+        }
+        int onError = execvp(allWords[0], allWords);
         printf("Error occured\n");
         exit(0);
     } else {
+        close(p[index][1]);
         wait();
     }
+}
+void executeCommand(char **allWords, int argumentLength, int index, int p[][2], int pipesLength) {
+    if (!argumentLength) return;  //if there are no arguments then just continue
+    printf("The arguments are:\n");
+    for (int j = 0; j < argumentLength; j++) {
+        printf("%s\n", allWords[j]);
+    }
+    // printf("\n");
+    char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
+    strcpy(commandName, allWords[0]);
+    char *filePath = NULL;
+    getActualPath(commandName, &filePath);
+    if (filePath == NULL) {
+        printf("Command %s not found\n", commandName);
+        return;
+    }
+    printf("\n");
+    createChild(filePath, allWords, argumentLength, index, p, pipesLength);
+    close(p[index][0]);
 }
 int main() {
     printWelcome();
     size_t MAX_LEN = 0;
     char *input = NULL;
     char **allWords = NULL;
+    char **allPipes = NULL;
+    int pipesLength = 0;
     int argumentLength = 0;
     char *pwd = (char *)calloc(PATH_MAX, sizeof(char));
     char *absolutePath = (char *)calloc(PATH_MAX, sizeof(char));
+    char *delimiterForCommand = " \t\n";
+    char *delimiterForPipe = "|";
     while (1) {
         getcwd(pwd, PATH_MAX);
         printf("%s $>", pwd);
         if (input)
             free(input);
         MAX_LEN = 0;
-        int len = getline(&input, &MAX_LEN, stdin);                   //get input from the stdin
-        splitInputIntoWords(input, len, &allWords, &argumentLength);  //This function is used to split into arguments
-        if (!argumentLength) continue;                                //if there are no arguments then just continue
-        printf("The arguments are:\n");
-        for (int i = 0; i < argumentLength; i++) {
-            printf("%s\n", allWords[i]);
+        int len = getline(&input, &MAX_LEN, stdin);  //get input from the stdin
+        splitInputIntoWords(input, len, &allPipes, &pipesLength, delimiterForPipe);
+        int p[pipesLength][2];
+        for (int i = 0; i < pipesLength; i++) {
+            pipe(p[i]);
+            printf("%s\n", allPipes[i]);
         }
-        printf("\n");
-        char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
-        strcpy(commandName, allWords[0]);
-        char *filePath = NULL;
-        getActualPath(commandName, &filePath);
-        if (filePath == NULL) {
-            printf("Command %s not found\n", commandName);
-            continue;
+        for (int i = 0; i < pipesLength; i++) {
+            splitInputIntoWords(allPipes[i], len, &allWords, &argumentLength, delimiterForCommand);  //This function is used to split into arguments
+            // if (!argumentLength) continue;                                                           //if there are no arguments then just continue
+            // printf("The arguments are:\n");
+            // for (int j = 0; j < argumentLength; j++) {
+            //     printf("%s\n", allWords[j]);
+            // }
+            // printf("\n");
+            // char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
+            // strcpy(commandName, allWords[0]);
+            // char *filePath = NULL;
+            // getActualPath(commandName, &filePath);
+            // if (filePath == NULL) {
+            //     printf("Command %s not found\n", commandName);
+            //     continue;
+            // }
+            // printf("\n");
+            // createChild(filePath, allWords, argumentLength);
+            executeCommand(allWords, argumentLength, i, p, pipesLength);
         }
-        printf("\n");
-        createChild(filePath, allWords, argumentLength);
     }
 }

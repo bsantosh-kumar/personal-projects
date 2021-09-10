@@ -1,11 +1,10 @@
-This 32766
 execv-testing
 execv-testing.c
 file1.txt
 file2.txt
 file3.txt
 get-file-path
-get-file-path.c
+get-file-path.
 pipe-testing
 pipe-testing.c
 ng.cpp
