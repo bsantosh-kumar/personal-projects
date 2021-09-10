@@ -1,0 +1,1 @@
+-rw-r--r-- 1 kali kali 0 Sep  8 09:08 file1.txt
