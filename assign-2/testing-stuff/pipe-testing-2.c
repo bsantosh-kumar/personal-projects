@@ -35,7 +35,9 @@ int main() {
             printf("came here %d\n", getpid());
             exit(0);
         } else {
-            wait(0);
+            close(p[i][1]);
+
+            wait();
         }
     }
 }
