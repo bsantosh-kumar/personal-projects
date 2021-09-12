@@ -1,13 +1,12 @@
-execv-testing
-execv-testing.c
-file1.txt
-file2.txt
-file3.txt
-get-file-path
-get-file-path.
-pipe-testing
-pipe-testing.c
-ng.cpp
--rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
--rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
--rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is a line
+this is after closing
+This is a line
+this is after closing
+This is a line
+this is after closing
+This is a line
+this is after closing
+This is a line
+this is after closing
+This is a line
+this is after closing

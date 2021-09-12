@@ -112,10 +112,10 @@ void getActualPath(char *commandName, char **filePath) {
     return;
 }
 void createChild(char *filePath, char **allWords, int argumentLength, int index, int p[][2], int pipesLength) {
+    close(p[index][1]);
     int childPID = fork();
     if (childPID == 0) {
         printf("filePath=%s index=%d\n", filePath, index);
-        close(p[index][1]);
         if (index != 0) {
             dup2(p[index][0], STDIN_FILENO);
         }
@@ -126,7 +126,6 @@ void createChild(char *filePath, char **allWords, int argumentLength, int index,
         printf("Error occured\n");
         exit(0);
     } else {
-        close(p[index][1]);
         wait();
     }
 }
@@ -149,6 +148,41 @@ void executeCommand(char **allWords, int argumentLength, int index, int p[][2], 
     createChild(filePath, allWords, argumentLength, index, p, pipesLength);
     close(p[index][0]);
 }
+void startCommandExecution(char *input, int len) {
+    char **allWords = NULL;
+    char **allPipes = NULL;
+    int pipesLength = 0;
+    int argumentLength = 0;
+    char *delimiterForCommand = " \t\n";
+    char *delimiterForPipe = "|";
+
+    splitInputIntoWords(input, len, &allPipes, &pipesLength, delimiterForPipe);
+    int p[pipesLength][2];
+    for (int i = 0; i < pipesLength; i++) {
+        pipe(p[i]);
+        printf("%s\n", allPipes[i]);
+    }
+    for (int i = 0; i < pipesLength; i++) {
+        splitInputIntoWords(allPipes[i], len, &allWords, &argumentLength, delimiterForCommand);  //This function is used to split into arguments
+        // if (!argumentLength) continue;                                                           //if there are no arguments then just continue
+        // printf("The arguments are:\n");
+        // for (int j = 0; j < argumentLength; j++) {
+        //     printf("%s\n", allWords[j]);
+        // }
+        // printf("\n");
+        // char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
+        // strcpy(commandName, allWords[0]);
+        // char *filePath = NULL;
+        // getActualPath(commandName, &filePath);
+        // if (filePath == NULL) {
+        //     printf("Command %s not found\n", commandName);
+        //     continue;
+        // }
+        // printf("\n");
+        // createChild(filePath, allWords, argumentLength);
+        executeCommand(allWords, argumentLength, i, p, pipesLength);
+    }
+}
 int main() {
     printWelcome();
     size_t MAX_LEN = 0;
@@ -162,37 +196,53 @@ int main() {
     char *delimiterForCommand = " \t\n";
     char *delimiterForPipe = "|";
     while (1) {
-        getcwd(pwd, PATH_MAX);
-        printf("%s $>", pwd);
+        printf("cmd >", pwd);
         if (input)
             free(input);
         MAX_LEN = 0;
         int len = getline(&input, &MAX_LEN, stdin);  //get input from the stdin
-        splitInputIntoWords(input, len, &allPipes, &pipesLength, delimiterForPipe);
-        int p[pipesLength][2];
-        for (int i = 0; i < pipesLength; i++) {
-            pipe(p[i]);
-            printf("%s\n", allPipes[i]);
+        //     splitInputIntoWords(input, len, &allPipes, &pipesLength, delimiterForPipe);
+        //     int p[pipesLength][2];
+        //     for (int i = 0; i < pipesLength; i++) {
+        //         pipe(p[i]);
+        //         printf("%s\n", allPipes[i]);
+        //     }
+        //     for (int i = 0; i < pipesLength; i++) {
+        //         splitInputIntoWords(allPipes[i], len, &allWords, &argumentLength, delimiterForCommand);  //This function is used to split into arguments
+        //         // if (!argumentLength) continue;                                                           //if there are no arguments then just continue
+        //         // printf("The arguments are:\n");
+        //         // for (int j = 0; j < argumentLength; j++) {
+        //         //     printf("%s\n", allWords[j]);
+        //         // }
+        //         // printf("\n");
+        //         // char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
+        //         // strcpy(commandName, allWords[0]);
+        //         // char *filePath = NULL;
+        //         // getActualPath(commandName, &filePath);
+        //         // if (filePath == NULL) {
+        //         //     printf("Command %s not found\n", commandName);
+        //         //     continue;
+        //         // }
+        //         // printf("\n");
+        //         // createChild(filePath, allWords, argumentLength);
+        //         executeCommand(allWords, argumentLength, i, p, pipesLength);
+        //     }
+        bool bgExec = false;
+        for (int i = len - 1; i >= 0; i--) {
+            if (input[i] == ' ' || input[i] == '\t' || input[i] == '\n')
+                continue;
+            else {
+                if (input[i] == '&') bgExec = true;
+                break;
+            }
         }
-        for (int i = 0; i < pipesLength; i++) {
-            splitInputIntoWords(allPipes[i], len, &allWords, &argumentLength, delimiterForCommand);  //This function is used to split into arguments
-            // if (!argumentLength) continue;                                                           //if there are no arguments then just continue
-            // printf("The arguments are:\n");
-            // for (int j = 0; j < argumentLength; j++) {
-            //     printf("%s\n", allWords[j]);
-            // }
-            // printf("\n");
-            // char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
-            // strcpy(commandName, allWords[0]);
-            // char *filePath = NULL;
-            // getActualPath(commandName, &filePath);
-            // if (filePath == NULL) {
-            //     printf("Command %s not found\n", commandName);
-            //     continue;
-            // }
-            // printf("\n");
-            // createChild(filePath, allWords, argumentLength);
-            executeCommand(allWords, argumentLength, i, p, pipesLength);
+        int startChild = fork();
+        if (startChild == 0)
+            startCommandExecution(input, len);
+        else {
+            if (!bgExec) {
+                wait();
+            }
         }
     }
 }
