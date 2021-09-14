@@ -111,23 +111,6 @@ void getActualPath(char *commandName, char **filePath) {
 
     return;
 }
-void createChild(char *filePath, char **allWords, int argumentLength, int index, int p[][2], int pipesLength) {
-    close(p[index][1]);
-    int childPID = fork();
-    if (childPID == 0) {
-        if (index != 0) {
-            dup2(p[index][0], STDIN_FILENO);
-        }
-        if (index + 1 != pipesLength) {
-            dup2(p[index + 1][1], STDOUT_FILENO);
-        }
-        int onError = execvp(allWords[0], allWords);
-        printf("Error occured\n");
-        exit(0);
-    } else {
-        wait();
-    }
-}
 void removeWhiteSpaces(char *str) {
     int i = 0, j = 0;
     while (str[i] != '\0') {
@@ -329,36 +312,22 @@ void completeCommandExecutionWithRedirection(char *actualCommand, int *fileDescp
         dup2(tempFileOutFD, STDOUT_FILENO);
         if (!(index == 0 && noOfFiles[0] == 0))
             dup2(tempFileInFD, STDIN_FILENO);
+        for (int i = 0; i < 1; i++) {
+            printf("%s\n", arguments[i]);
+        }
+
         execvp(actualCommand, arguments);
         printf("Some error occured while executing %s\n", actualCommand);
         exit(0);
     }
+    exit(0);
 }
-void executeCommand(char **allWords, int argumentLength, int index, int p[][2], int pipesLength) {
-    if (!argumentLength) return;
-    printf("The arguments are:\n");
-    for (int j = 0; j < argumentLength; j++) {
-        printf("%s\n", allWords[j]);
-    }
-    char *commandName = (char *)calloc(strlen(allWords[0]), sizeof(char));
-    strcpy(commandName, allWords[0]);
-    char *filePath = NULL;
-    getActualPath(commandName, &filePath);
-    if (filePath == NULL) {
-        printf("Command %s not found\n", commandName);
-        return;
-    }
-    printf("\n");
-    createChild(filePath, allWords, argumentLength, index, p, pipesLength);
-    close(p[index][0]);
-}
-void startCommandExecution(char *input, int len) {
+void startCommandExecution(char *input, int len, bool bgExec) {
     char **allWords = NULL;
     char **allPipes = NULL;
     int pipesLength = 0;
     char *delimiterForCommand = " \t\n";
     char *delimiterForPipe = "|";
-
     splitInputIntoWords(input, len, &allPipes, &pipesLength, delimiterForPipe);
     int p[pipesLength + 1][2];
     for (int i = 0; i < pipesLength + 1; i++) {
@@ -381,10 +350,15 @@ void startCommandExecution(char *input, int len) {
         int child = fork();
         if (child == 0) {
             completeCommandExecutionWithRedirection(allArguments[0], fileDescpt, noOfFiles, allFiles, allArguments, pipeIndex, pipesLength);
+            // printf("Ch pid=%d\n", getpid());
+            exit(0);
         } else {
             wait();
         }
     }
+    if (bgExec == true)
+        printf("done execution %s pid=%d \n", input, getpid(), getppid());
+    exit(0);
 }
 int main() {
     printWelcome();
@@ -407,19 +381,28 @@ int main() {
         if (strcmp(input, "exit\n") == 0) {
             break;
         }
+        if (strcmp(input, "\n") == 0) {
+            continue;
+        }
         bool bgExec = false;
         for (int i = len - 1; i >= 0; i--) {
             if (input[i] == ' ' || input[i] == '\t' || input[i] == '\n')
                 continue;
             else {
-                if (input[i] == '&') bgExec = true;
+                if (input[i] == '&') {
+                    input[i] = '\0';
+                    bgExec = true;
+                }
                 break;
             }
         }
         int startChild = fork();
-        if (startChild == 0)
-            startCommandExecution(input, len);
-        else {
+        if (startChild == 0) {
+            if (bgExec)
+                printf("Started background execution pid=%d\n", getpid());
+            startCommandExecution(input, len, bgExec);
+            exit(0);
+        } else {
             if (!bgExec) {
                 wait();
             }
