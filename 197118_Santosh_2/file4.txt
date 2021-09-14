@@ -1,0 +1,150 @@
+tempFileFD=4
+file1.txt GETTING IT
+This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+file5.txt GETTING IT
+This is file5tempFileFD=4
+file1.txt GETTING IT
+This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+file5.txt GETTING IT
+This is file5tempFileFD=0
+file1.txt GETTING IT
+This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+file5.txt GETTING IT
+This is file5This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is file5This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is file5This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is file5This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is file5This 32766
+execv-testing
+execv-testing.c
+file1.txt
+file2.txt
+file3.txt
+get-file-path
+get-file-path.c
+pipe-testing
+pipe-testing.c
+ng.cpp
+-rw-r--r-- 1 kali kali    78 Sep  8 10:02 file1.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:14 file2.txt
+-rw-r--r-- 1 kali kali    48 Sep  8 09:09 file3.txt
+This is file5

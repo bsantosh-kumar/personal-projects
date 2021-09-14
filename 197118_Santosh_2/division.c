@@ -34,7 +34,7 @@ void segregateFiles(char *command, int noOfFiles[], char **allFiles[]) {
         int count = 0;
         for (j = index; j < lenOfString; j++) {
             if (savedInput1[j] != '>') {
-                if (j == '<') j++;
+                if (savedInput1[j] == '<') j++;
                 break;
             } else {
                 printf("j as;lfjka %d\n", j);
@@ -77,7 +77,7 @@ void segregateFiles(char *command, int noOfFiles[], char **allFiles[]) {
         printf("index=%d\n", index);
         for (j = index; j < lenOfString; j++) {
             if (savedInput1[j] != '>') {
-                if (j == '<') j++;
+                if (savedInput1[j] == '<') j++;
                 break;
             } else {
                 printf("j as;lfjka %d\n", j);
@@ -119,7 +119,7 @@ int getCommand(char *input, int len) {
     for (int i = 0; i < len; i++) {
         if (input[i] == '>' || input[i] == '<') return i;
     }
-    return len - 1;
+    return len;
 }
 void getFDs(char **allFiles[], int noOfFiles[], int *fileDescpt[]) {
     fileDescpt[0] = (int *)calloc(noOfFiles[0] + 1, sizeof(int));
@@ -129,7 +129,7 @@ void getFDs(char **allFiles[], int noOfFiles[], int *fileDescpt[]) {
         int fd = open(allFiles[0][i], O_RDONLY);
         if (fd == -1) {
             printf("cannot open the file %s\n", allFiles[0][i]);
-            exit(0);
+            // exit(0);
         }
         fileDescpt[0][i] = fd;
     }
@@ -139,7 +139,7 @@ void getFDs(char **allFiles[], int noOfFiles[], int *fileDescpt[]) {
             f = fopen(allFiles[1][i], "w");
             fclose(f);
         }
-        int fd = open(allFiles[1][i], O_WRONLY);
+        int fd = open(allFiles[1][i], O_WRONLY | O_APPEND);
         if (fd == -1) {
             printf("cannot open the file %s\n", allFiles[1][i]);
             // exit(0);
@@ -162,7 +162,7 @@ void getFDs(char **allFiles[], int noOfFiles[], int *fileDescpt[]) {
     }
 }
 void getAllFileDescriptors(char *command, char **actualCommand, char **allFiles[], int noOfFiles[], int *fileDescpt[]) {
-    int index = getCommand(command, 69);
+    int index = getCommand(command, strlen(command));
     char *fileString = command + index;
     (*actualCommand) = (char *)calloc(index + 1, sizeof(char));
     for (int i = 0; i < index; i++) {
@@ -178,14 +178,143 @@ void getAllFileDescriptors(char *command, char **actualCommand, char **allFiles[
         }
         printf("done\n");
     }
-    // getFDs(allFiles, noOfFiles, fileDescpt);
+    getFDs(allFiles, noOfFiles, fileDescpt);
+}
+void executeTheCommand(char *actualCommand, int *fileDescpt[], int noOfFiles[], char **allFiles[], char *arguments[], int index, int n) {
+    char tempFileOut[] = "/tmp/tempFile-XXXXXX";
+    int tempFileOutFD = mkstemp(tempFileOut);
+    char tempFileIn[] = "/tmp/tempFile-XXXXXX";
+    int tempFileInFD = mkstemp(tempFileIn);
+    printf("Over here look at me!!\n");
+    unlink(tempFileIn);
+    unlink(tempFileOut);
+    if (noOfFiles[1] + noOfFiles[2] == 0) {
+        tempFileOutFD = STDOUT_FILENO;
+    }
+    int child = fork();
+    if (child != 0) {
+        wait();
+        if (noOfFiles[1] + noOfFiles[2] == 0) {
+            exit(0);
+        }
+        printf("CAME HERE\n");
+        for (int i = 1; i <= 2; i++) {
+            lseek(tempFileOutFD, 0, SEEK_SET);
+            char c;
+            int count = 1;
+            for (int j = 0; j < noOfFiles[i]; j++) {
+                lseek(tempFileOutFD, 0, SEEK_SET);
+                while ((count = read(tempFileOutFD, &c, 1)) > 0)
+                    write(fileDescpt[i][j], &c, 1);
+            }
+            if (i == 1) {
+                int j = noOfFiles[i];
+                lseek(tempFileOutFD, 0, SEEK_SET);
+                printf("index=%d n=%d\n", index, n);
+                count = 1;
+                if (index + 1 == n) {
+                    while ((count = read(tempFileOutFD, &c, 1)) > 0)
+                        printf("%c", c);
+                    continue;
+                }
+                while ((count = read(tempFileOutFD, &c, 1)) > 0)
+                    write(fileDescpt[i][j], &c, 1);
+            }
+        }
+        // continue;
+    } else {
+        printf("tempFileOutFD=%d\n", tempFileOutFD);
+        int count = 1;
+        for (int i = 0; i < 1; i++) {
+            char c;
+            for (int j = 0; j < noOfFiles[i]; j++) {
+                if (fileDescpt[i][j] < 0) continue;
+                while ((count = read(fileDescpt[i][j], &c, 1)) > 0)
+                    write(tempFileInFD, &c, 1);
+            }
+        }
+        if (index == 0) {
+            printf("Came here for input\n");
+            if (noOfFiles[0] == 0)
+                tempFileInFD = STDIN_FILENO;
+        } else {
+            char c;
+            while ((count = read(fileDescpt[0][noOfFiles[0]], &c, 1)) > 0)
+                write(tempFileInFD, &c, 1);
+        }
+        printf("Came out of if\n");
+        lseek(tempFileInFD, 0, SEEK_SET);
+        dup2(tempFileOutFD, STDOUT_FILENO);
+        dup2(tempFileInFD, STDIN_FILENO);
+        execvp(actualCommand, arguments);
+        printf("Some error occured while executing\n");
+        exit(0);
+        // for (int k = 0; k < noOfFiles[0] + 1; k++) {
+        //     if (k != noOfFiles[0])
+        //         printf("%s GETTING IT\n", allFiles[0][k]);
+        //     else
+        //         printf("bla bla bla\n");
+        //     int grand = fork();
+        //     if (grand != 0) {
+        //         wait();
+        //         continue;
+        //     }
+        //     int fd = open(allFiles[0][k], O_RDONLY);
+        //     if (k == noOfFiles[0] && index == 0) {
+        //         if (noOfFiles[0] != 0) exit(0);
+        //         printf("no of files are zero\n");
+        //         printf("actualCommand=%s\n", actualCommand);
+        //         execvp(actualCommand, arguments);
+        // printf("Some error occured while executing with input file %s\n", fileDescpt[0][k]);
+        // exit(0);
+        //     }
+        //     dup2(fd, STDIN_FILENO);
+        //     // printf("\t input=%s\n", allFiles[0][k]);
+        //     execvp(actualCommand, arguments);
+        //     printf("Some error occured while executing with input file %s\n", fileDescpt[0][k]);
+        //     exit(0);
+        // }
+    }
 }
 int main() {
-    char *command = " cat < file1.txt > file2.txt >> file3.txt>>file4.txt<      file5.txt";
+    int p[2][2];
+    pipe(p[0]);
+    pipe(p[1]);
+    int pipeIndex = 0;
+    int pipeLength = 5;
+    char *command = "cat<file1.txt >file2.txt<file5.txt>>file3.txt>>file4.txt";
     char **allFiles[3];
     int noOfFiles[3] = {0};
     int *fileDescpt[3] = {0};
     char *actualCommand = "";
     getAllFileDescriptors(command, &actualCommand, allFiles, noOfFiles, fileDescpt);
     printf("\"%s\"\n", actualCommand);
+    removeWhiteSpaces(actualCommand);
+    char *arguments[] = {actualCommand, NULL};
+    fileDescpt[0][noOfFiles[0]] = p[0][0];
+    fileDescpt[1][noOfFiles[1]] = p[1][1];
+    for (int i = 0; i < 2; i++) {
+        printf("%d %d\n", p[i][0], p[i][1]);
+    }
+    printf("\"%s\"\n", actualCommand);
+    // close(p[0][1]);
+    for (int i = 0; i < 3; i++) {
+        printf("i=%d ", i);
+        for (int j = 0; j < noOfFiles[i]; j++) {
+            printf("%d ", fileDescpt[i][j]);
+        }
+        if (i == 0 || i == 1) {
+            printf("%d ", fileDescpt[i][noOfFiles[i]]);
+        }
+        printf("\n");
+    }
+    int child = fork();
+    if (child == 0) {
+        printf("Came INTO CHILD\n");
+        executeTheCommand(arguments[0], fileDescpt, noOfFiles, allFiles, arguments, pipeIndex, pipeLength);
+        // printf("IN CHILD\n");
+        // execvp(arguments[0], arguments);
+    } else {
+        wait();
+    }
 }

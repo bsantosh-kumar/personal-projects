@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include <unistd.h>
 int main() {
-    char *argv[] = {"cd", "..", NULL};
+    char *argv[] = {"cat", NULL};
     int child = fork();
     int x;
     if (child == 0) {
         printf("Camer here\n");
-        x = execvp("cd", argv);
+        x = execvp(argv[0], argv);
         printf("x=%d \n", x);
-    } else
+    } else {
+        wait();
         printf("This %d\n", x);
+    }
     // printf("HERE %d\n", child);
 }
