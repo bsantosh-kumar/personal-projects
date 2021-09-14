@@ -180,7 +180,7 @@ void getAllFileDescriptors(char *command, char **actualCommand, char **allFiles[
     }
     getFDs(allFiles, noOfFiles, fileDescpt);
 }
-void executeTheCommand(char *actualCommand, int *fileDescpt[], int noOfFiles[], char **allFiles[], char *arguments[], int index, int n) {
+void completeCommandExecutionWithRedirection(char *actualCommand, int *fileDescpt[], int noOfFiles[], char **allFiles[], char *arguments[], int index, int n) {
     char tempFileOut[] = "/tmp/tempFile-XXXXXX";
     int tempFileOutFD = mkstemp(tempFileOut);
     char tempFileIn[] = "/tmp/tempFile-XXXXXX";
@@ -311,7 +311,7 @@ int main() {
     int child = fork();
     if (child == 0) {
         printf("Came INTO CHILD\n");
-        executeTheCommand(arguments[0], fileDescpt, noOfFiles, allFiles, arguments, pipeIndex, pipeLength);
+        completeCommandExecutionWithRedirection(arguments[0], fileDescpt, noOfFiles, allFiles, arguments, pipeIndex, pipeLength);
         // printf("IN CHILD\n");
         // execvp(arguments[0], arguments);
     } else {
