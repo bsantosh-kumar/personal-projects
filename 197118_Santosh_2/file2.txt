@@ -1,6 +1,1 @@
-"In file1""In file1""In file1"
-This is some text That I dont know"In file1"
-This is some text That I dont know"In file1"
-This is some text That I dont know"In file1"
-This is some text That I dont know"In file1"
-This is some text That I dont know"In file1"
+"In file1"
