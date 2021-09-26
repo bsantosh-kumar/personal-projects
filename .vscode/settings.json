@@ -1,6 +1,10 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "random": "c"
+        "random": "c",
+        "charconv": "c",
+        "chrono": "c",
+        "ratio": "c",
+        "xloctime": "c"
     }
 }

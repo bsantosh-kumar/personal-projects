@@ -16,7 +16,7 @@ struct processProperties_t {
     int pid;               //process id
     int at;                //arrival time
     int bt;                //burst time
-    int rt;                //response time
+    int frt;               //response time
     int ct;                //completion time
     int tt;                //turn around time
     int wt;                //waiting time
@@ -30,14 +30,14 @@ void intializeProperties(processProperties *currProcess) {
     currProcess->pid = 0;
     currProcess->at = 0;
     currProcess->bt = 0;
-    currProcess->rt = 0;
+    currProcess->frt = 0;
     currProcess->ct = 0;
     currProcess->tt = 0;
     currProcess->wt = 0;
     currProcess->allProperties[0] = &(currProcess->pid);
     currProcess->allProperties[1] = &(currProcess->at);
     currProcess->allProperties[2] = &(currProcess->bt);
-    currProcess->allProperties[3] = &(currProcess->rt);
+    currProcess->allProperties[3] = &(currProcess->frt);
     currProcess->allProperties[4] = &(currProcess->ct);
     currProcess->allProperties[5] = &(currProcess->tt);
     currProcess->allProperties[6] = &(currProcess->wt);
@@ -116,10 +116,9 @@ void printProcesses(processProperties **processes, int noOfProcess) {
 bool checkForIdle(int arrivalTime, int currTime) {
     return arrivalTime > currTime;
 }
-void calculateTTandWT(processProperties **processes, int noOfProcess) {
+void calculateTT(processProperties **processes, int noOfProcess) {
     for (int i = 0; i < noOfProcess; i++) {
         processes[i]->tt = processes[i]->ct - processes[i]->at;
-        processes[i]->wt = processes[i]->tt - processes[i]->bt;
     }
 }
 void FCFSAlgo(processProperties **processes, int noOfProcess) {
@@ -143,14 +142,15 @@ void FCFSAlgo(processProperties **processes, int noOfProcess) {
         }
         if (!isVisited[currProcessIndex]) {
             isVisited[currProcessIndex] = true;
-            processes[currProcessIndex]->rt = currTime;
+            processes[currProcessIndex]->frt = currTime;
         }
         printf("Executing process P%d from %d to %d\n", processes[currProcessIndex]->pid, currTime, processes[currProcessIndex]->bt + currTime);
+        processes[currProcessIndex]->wt = currTime - processes[currProcessIndex]->at;
         currTime += processes[currProcessIndex]->bt;
         processes[currProcessIndex]->ct = currTime;
         currProcessIndex++;
     }
-    calculateTTandWT(processes, noOfProcess);
+    calculateTT(processes, noOfProcess);
 }
 int main() {
     processProperties **processes = NULL;

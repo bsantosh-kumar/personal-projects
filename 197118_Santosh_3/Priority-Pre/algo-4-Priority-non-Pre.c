@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
-#define N 3
+#define N 4
 
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {
     FILE *inputFile = fopen(fileName, "r");
@@ -28,6 +28,7 @@ void takeInput(processProperties ***processes, char fileName[], int *noOfProcess
         for (int j = 0; j < N; j++) {
             fscanf(inputFile, "%d", (*processes)[i]->allProperties[j]);
         }
+        (*processes)[i]->rt = (*processes)[i]->bt;
     }
     (*noOfProcess) = count / N;
 }
@@ -40,22 +41,29 @@ int noOfDigits(int n) {
     return count;
 }
 void printProcesses(processProperties **processes, int noOfProcess) {
-    char *headings[] = {"Process ID", "Arrival Time", "Burst Time", "First Response Time", "Completion Time", "Turn-around Time", "Waiting Time"};
+    char *headings[] = {"Process ID", "Arrival Time", "Burst Time", "Priority", "Remaining Time", "First Response Time", "Completion Time", "Turn-around Time", "Waiting Time"};
     int maxSizeForFormatting[M] = {0};
     for (int i = 0; i < M; i++) {
+        if (i == 4) continue;
         maxSizeForFormatting[i] = max(maxSizeForFormatting[i], strlen(headings[i]));
     }
     for (int i = 0; i < noOfProcess; i++) {
         for (int j = 0; j < M; j++) {
+            if (j == 4) continue;
+
             maxSizeForFormatting[i] = max(maxSizeForFormatting[i], noOfDigits(*(processes[i]->allProperties[j])));
         }
     }
     for (int i = 0; i < M; i++) {
+        if (i == 4) continue;
+
         maxSizeForFormatting[i] += 2;
         printf("%*s", maxSizeForFormatting[i], headings[i]);
     }
     printf("\n");
     for (int i = 0; i < M; i++) {
+        if (i == 4) continue;
+
         for (int j = 0; j < maxSizeForFormatting[i]; j++) {
             printf("-");
         }
@@ -63,6 +71,8 @@ void printProcesses(processProperties **processes, int noOfProcess) {
     printf("\n");
     for (int i = 0; i < noOfProcess; i++) {
         for (int j = 0; j < M; j++) {
+            if (j == 4) continue;
+
             printf("%*d", maxSizeForFormatting[j], *(processes[i]->allProperties[j]));
         }
         printf("\n");
@@ -70,6 +80,9 @@ void printProcesses(processProperties **processes, int noOfProcess) {
 }
 bool compareBasedOnBT(processProperties *a, processProperties *b) {
     return a->bt < b->bt;
+}
+bool compareBasedOnPri(processProperties *a, processProperties *b) {
+    return a->pri < b->pri;
 }
 int compareBasedOnAT(const void *a, const void *b) {
     processProperties *_a = *(processProperties **)(a);
@@ -87,30 +100,33 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
     int currIndex = 0;
     int currTime = 0;
     while (heapSize != 0 || currTime == 0 || currIndex < noOfProcess) {
-        if (processes[currIndex]->at > currTime) {
+        if (currIndex < noOfProcess && processes[currIndex]->at > currTime) {
             printf("Was Idle from %d to %d\n", currTime, processes[currIndex]->at);
             currTime = processes[currIndex]->at;
             continue;
         }
         int temp = currIndex;
         while (temp < noOfProcess && processes[temp]->at <= currTime) {
-            insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnBT);
+            insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnPri);
             temp++;
         }
         currIndex = temp;
-        processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnBT);
-        currProcess->frt = currTime;
-        printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->bt + currTime);
+        processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnPri);
         currProcess->wt = currTime - currProcess->at;
-        currTime += currProcess->bt;
-        currProcess->ct = currTime;
+        currProcess->frt = currTime;
+        int tempTime = currTime;
+        tempTime += currProcess->bt;
+        currProcess->ct = tempTime;
+        printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->ct);
+        currTime = tempTime;
     }
     calculateTT(processes, noOfProcess);
+    printf("\n");
 }
 int main() {
     processProperties **processes = NULL;
     int noOfProcess = 0;
-    takeInput(&processes, "input-SJF.txt", &noOfProcess);
+    takeInput(&processes, "input-Priority-non-Pre.txt", &noOfProcess);
     qsort(processes, noOfProcess, sizeof(processProperties *), compareBasedOnAT);
     SJFAlgo(processes, noOfProcess);
     printProcesses(processes, noOfProcess);

@@ -32,7 +32,7 @@ void takeInput(processProperties ***processes, char fileName[], int *noOfProcess
     (*noOfProcess) = count / N;
 }
 
-bool compareBasedOnBT(processProperties *a, processProperties *b) {
+bool compareBasedOnRT(processProperties *a, processProperties *b) {
     return a->bt < b->bt;
 }
 int main() {
@@ -43,10 +43,10 @@ int main() {
     processProperties **heap = malloc((2 * noOfProcess + 1) * sizeof(processProperties *));
     int heapSize = 0;
     for (int i = 0; i < noOfProcess; i++) {
-        insertIntoPQ(processes[i], heap, &heapSize, compareBasedOnBT);
+        insertIntoPQ(processes[i], heap, &heapSize, compareBasedOnRT);
     }
     while (heapSize) {
-        processProperties *temp = extractMinProcess(heap, &heapSize, compareBasedOnBT);
+        processProperties *temp = extractMinProcess(heap, &heapSize, compareBasedOnRT);
     }
 
     return 0;

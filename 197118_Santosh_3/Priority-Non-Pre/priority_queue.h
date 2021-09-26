@@ -1,6 +1,6 @@
 #include "process_properties.h"
 
-void insertIntoPQ(processProperties *n, processProperties **heap, int *s, bool *cmp(processProperties *, processProperties *)) {
+void insertIntoPQ(processProperties *n, processProperties **heap, int *s, bool (*cmp)(processProperties *, processProperties *)) {
     int i = (*s), j;
     // heap[i] = malloc(sizeof(processProperties));
     // intializeProperties(heap[i]);
@@ -16,7 +16,7 @@ void insertIntoPQ(processProperties *n, processProperties **heap, int *s, bool *
     }
     (*s)++;
 }
-processProperties *extractMinProcess(processProperties **heap, int *s, bool *cmp(processProperties *, processProperties *)) {
+processProperties *extractMinProcess(processProperties **heap, int *s, bool (*cmp)(processProperties *, processProperties *)) {
     if ((*s) == 0)
         return NULL;
     int i = 0, j = 1, k = 2;
