@@ -17,10 +17,6 @@ void printWelcome() {
 void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsLength, char *delimiter) {
     char *word;
     char *savePointer1 = NULL;
-    /*
-        As the string changes with strtok_r function 
-        copying it into two temporary strings
-    */
     char *savedInput1 = (char *)calloc(len + 1, sizeof(char));
     char *savedInput2 = (char *)calloc(len + 1, sizeof(char));
     strcpy(savedInput1, input);
@@ -30,17 +26,12 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     word = strtok_r(savedInput1, deLimit, &savePointer1);
     int countNoOfWords = 0;
     int maxLenWord = 0;
-    /*
-        First we will calculate the number of words, inside it
-        also the maximum length of the words
-    */
     while (word != NULL) {
         int len = strlen(word);
         maxLenWord = max(len, maxLenWord);
         word = strtok_r(NULL, deLimit, &savePointer1);
         countNoOfWords++;
     }
-    /*Freeing all the previous words*/
     for (int i = 0; i < (*argumentsLength); i++) {
         free((*allWords)[i]);
     }
@@ -55,9 +46,6 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     char *savePointer2 = NULL;
     word = strtok_r(savedInput2, deLimit, &savePointer2);
     int index = 0;
-    /*
-        Now, we insert all the new words
-    */
     while (word != NULL) {
         int currLen = strlen(word);
         for (int i = 0; i < currLen; i++) {
@@ -312,10 +300,6 @@ void completeCommandExecutionWithRedirection(char *actualCommand, int *fileDescp
         dup2(tempFileOutFD, STDOUT_FILENO);
         if (!(index == 0 && noOfFiles[0] == 0))
             dup2(tempFileInFD, STDIN_FILENO);
-        for (int i = 0; i < 1; i++) {
-            printf("%s\n", arguments[i]);
-        }
-
         execvp(actualCommand, arguments);
         printf("Some error occured while executing %s\n", actualCommand);
         exit(0);
@@ -350,7 +334,6 @@ void startCommandExecution(char *input, int len, bool bgExec) {
         int child = fork();
         if (child == 0) {
             completeCommandExecutionWithRedirection(allArguments[0], fileDescpt, noOfFiles, allFiles, allArguments, pipeIndex, pipesLength);
-            // printf("Ch pid=%d\n", getpid());
             exit(0);
         } else {
             wait();
