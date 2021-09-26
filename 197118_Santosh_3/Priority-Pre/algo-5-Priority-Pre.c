@@ -78,8 +78,8 @@ void printProcesses(processProperties **processes, int noOfProcess) {
         printf("\n");
     }
 }
-bool compareBasedOnBT(processProperties *a, processProperties *b) {
-    return a->bt < b->bt;
+bool compareBasedOnRT(processProperties *a, processProperties *b) {
+    return a->rt < b->rt;
 }
 bool compareBasedOnPri(processProperties *a, processProperties *b) {
     return a->pri < b->pri;
@@ -87,7 +87,9 @@ bool compareBasedOnPri(processProperties *a, processProperties *b) {
 int compareBasedOnAT(const void *a, const void *b) {
     processProperties *_a = *(processProperties **)(a);
     processProperties *_b = *(processProperties **)(b);
-    return _a->at - _b->at;
+    if (_a->at != _b->at)
+        return _a->at - _b->at;
+    return _a->bt - _b->bt;
 }
 void calculateTT(processProperties **processes, int noOfProcess) {
     for (int i = 0; i < noOfProcess; i++) {
@@ -100,25 +102,54 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
     int currIndex = 0;
     int currTime = 0;
     while (heapSize != 0 || currTime == 0 || currIndex < noOfProcess) {
-        if (currIndex < noOfProcess && processes[currIndex]->at > currTime) {
+        if (currIndex < noOfProcess && processes[currIndex]->at > currTime && heapSize == 0) {
             printf("Was Idle from %d to %d\n", currTime, processes[currIndex]->at);
             currTime = processes[currIndex]->at;
             continue;
         }
-        int temp = currIndex;
-        while (temp < noOfProcess && processes[temp]->at <= currTime) {
-            insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnPri);
-            temp++;
+        int tempIndex = currIndex;
+        while (tempIndex < noOfProcess && processes[tempIndex]->at <= currTime) {
+            insertIntoPQ(processes[tempIndex], heap, &heapSize, compareBasedOnPri);
+            tempIndex++;
         }
-        currIndex = temp;
+        currIndex = tempIndex;
         processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnPri);
-        currProcess->wt = currTime - currProcess->at;
-        currProcess->frt = currTime;
+        if (currProcess->rt == currProcess->bt)
+            currProcess->frt = currTime;
         int tempTime = currTime;
-        tempTime += currProcess->bt;
-        currProcess->ct = tempTime;
+        currProcess->wt += currTime - currProcess->ct;
+        while (tempIndex < noOfProcess) {
+            if (currProcess->rt == 0) {
+                currProcess->ct = tempTime;
+                break;
+            }
+            if (currProcess->rt <= processes[tempIndex]->at - tempTime) {
+                tempTime += currProcess->rt;
+                currProcess->ct = tempTime;
+                break;
+            }
+            currProcess->rt -= processes[tempIndex]->at - tempTime;
+            tempTime = processes[tempIndex]->at;
+            currProcess->ct = tempTime;
+            if (compareBasedOnPri(currProcess, processes[tempIndex])) {
+                while (tempIndex < noOfProcess && processes[tempIndex]->at <= tempTime) {
+                    insertIntoPQ(processes[tempIndex], heap, &heapSize, compareBasedOnPri);
+                    tempIndex++;
+                }
+                continue;
+            } else {
+                insertIntoPQ(currProcess, heap, &heapSize, compareBasedOnPri);
+                break;
+            }
+        }
+        if (tempIndex == noOfProcess) {
+            tempTime += currProcess->rt;
+            currProcess->rt = 0;
+            currProcess->ct = tempTime;
+        }
         printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->ct);
         currTime = tempTime;
+        currIndex = tempIndex;
     }
     calculateTT(processes, noOfProcess);
     printf("\n");
@@ -126,7 +157,7 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
 int main() {
     processProperties **processes = NULL;
     int noOfProcess = 0;
-    takeInput(&processes, "input-Priority-non-Pre.txt", &noOfProcess);
+    takeInput(&processes, "input-Priority-Pre.txt", &noOfProcess);
     qsort(processes, noOfProcess, sizeof(processProperties *), compareBasedOnAT);
     SJFAlgo(processes, noOfProcess);
     printProcesses(processes, noOfProcess);
