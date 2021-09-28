@@ -68,8 +68,10 @@ void printProcesses(processProperties **processes, int noOfProcess) {
         printf("\n");
     }
 }
-bool compareBasedOnBT(processProperties *a, processProperties *b) {
-    return a->bt < b->bt;
+bool compareBasedOnBT(void *a, void *b) {
+    processProperties *_a = (processProperties *)a;
+    processProperties *_b = (processProperties *)b;
+    return _a->bt < _b->bt;
 }
 int compareBasedOnAT(const void *a, const void *b) {
     processProperties *_a = *(processProperties **)(a);
@@ -94,11 +96,11 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
         }
         int temp = currIndex;
         while (temp < noOfProcess && processes[temp]->at <= currTime) {
-            insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnBT);
+            insertIntoPQ(processes[temp], heap, sizeof(heap[0]), &heapSize, compareBasedOnBT);
             temp++;
         }
         currIndex = temp;
-        processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnBT);
+        processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnBT);
         currProcess->frt = currTime;
         printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->bt + currTime);
         currProcess->wt = currTime - currProcess->at;

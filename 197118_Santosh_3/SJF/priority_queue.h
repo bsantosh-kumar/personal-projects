@@ -1,42 +1,44 @@
-#include "process_properties.h"
+#include <stdio.h>
 
-void insertIntoPQ(processProperties *n, processProperties **heap, int *s, bool *cmp(processProperties *, processProperties *)) {
+void swap(void **x, void **y) {
+    void *temp = (*x);
+    (*x) = (*y);
+    (*y) = temp;
+}
+void insertIntoPQ(void *n, void **heap, int eleSize, int *s, bool *cmp(void *, void *)) {
     int i = (*s), j;
-    // heap[i] = malloc(sizeof(processProperties));
-    // intializeProperties(heap[i]);
-    // copy(n, heap[i]);
-    heap[i] = n;
+    *(heap + i * eleSize) = n;
     while (i > 0) {
         j = i;
         i = (i - 1) / 2;
-        if (cmp(heap[j], heap[i]))
-            swap(heap[j], heap[i]);
+        if (cmp(*(heap + j * eleSize), *(heap + i * eleSize)))
+            swap((heap + j * eleSize), (heap + i * eleSize));
         else
             break;
     }
     (*s)++;
 }
-processProperties *extractMinProcess(processProperties **heap, int *s, bool *cmp(processProperties *, processProperties *)) {
+void *extractMinProcess(void **heap, int eleSize, int *s, bool *cmp(void *, void *)) {
     if ((*s) == 0)
         return NULL;
     int i = 0, j = 1, k = 2;
-    processProperties *n = heap[0];
-    heap[0] = heap[(*s) - 1];
+    void *n = *(heap + 0 * eleSize);
+    *(heap + 0 * eleSize) = *(heap + ((*s) - 1) * eleSize);
     (*s)--;
     while (j < (*s)) {
-        if ((!cmp(heap[i], heap[j])) && k < (*s) && (!cmp(heap[i], heap[k]))) {
-            if (cmp(heap[j], heap[k])) {
-                swap(heap[j], heap[i]);
+        if ((!cmp(*(heap + i * eleSize), *(heap + j * eleSize))) && k < (*s) && (!cmp(*(heap + i * eleSize), *(heap + k * eleSize)))) {
+            if (cmp(*(heap + j * eleSize), *(heap + k * eleSize))) {
+                swap((heap + j * eleSize), (heap + i * eleSize));
                 i = j;
             } else {
-                swap(heap[k], heap[i]);
+                swap((heap + k * eleSize), (heap + i * eleSize));
                 i = k;
             }
-        } else if (!cmp(heap[i], heap[j])) {
-            swap(heap[j], heap[i]);
+        } else if (!cmp(*(heap + i * eleSize), *(heap + j * eleSize))) {
+            swap((heap + j * eleSize), (heap + i * eleSize));
             i = j;
-        } else if (k < (*s) && (!cmp(heap[i], heap[k]))) {
-            swap(heap[k], heap[i]);
+        } else if (k < (*s) && (!cmp(*(heap + i * eleSize), *(heap + k * eleSize)))) {
+            swap((heap + k * eleSize), (heap + i * eleSize));
             i = k;
         } else
             break;
