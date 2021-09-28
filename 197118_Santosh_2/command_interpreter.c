@@ -32,7 +32,6 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
         word = strtok_r(NULL, deLimit, &savePointer1);
         countNoOfWords++;
     }
-    /*Freeing all the previous words*/
     for (int i = 0; i < (*argumentsLength); i++) {
         free((*allWords)[i]);
     }
@@ -47,9 +46,6 @@ void splitInputIntoWords(char *input, int len, char ***allWords, int *argumentsL
     char *savePointer2 = NULL;
     word = strtok_r(savedInput2, deLimit, &savePointer2);
     int index = 0;
-    /*
-        Now, we insert all the new words
-    */
     while (word != NULL) {
         int currLen = strlen(word);
         for (int i = 0; i < currLen; i++) {
@@ -304,12 +300,8 @@ void completeCommandExecutionWithRedirection(char *actualCommand, int *fileDescp
         dup2(tempFileOutFD, STDOUT_FILENO);
         if (!(index == 0 && noOfFiles[0] == 0))
             dup2(tempFileInFD, STDIN_FILENO);
-        child = fork();
-        if (child == 0) {
-            execvp(actualCommand, arguments);
-            printf("Some error occured while executing %s\n", actualCommand);
-            exit(0);
-        }
+        execvp(actualCommand, arguments);
+        printf("Some error occured while executing %s\n", actualCommand);
         exit(0);
     }
     exit(0);
@@ -342,7 +334,6 @@ void startCommandExecution(char *input, int len, bool bgExec) {
         int child = fork();
         if (child == 0) {
             completeCommandExecutionWithRedirection(allArguments[0], fileDescpt, noOfFiles, allFiles, allArguments, pipeIndex, pipesLength);
-            // printf("Ch pid=%d\n", getpid());
             exit(0);
         } else {
             wait();
