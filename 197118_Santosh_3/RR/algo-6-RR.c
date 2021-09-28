@@ -92,32 +92,6 @@ void calculateTT(processProperties **processes, int noOfProcess) {
         processes[i]->tt = processes[i]->ct - processes[i]->at;
     }
 }
-// void SJFAlgo(processProperties **processes, int noOfProcess) {
-//     processProperties **heap = malloc((2 * noOfProcess + 1) * sizeof(processProperties *));
-//     int heapSize = 0;
-//     int currIndex = 0;
-//     int currTime = 0;
-//     while (heapSize != 0 || currTime == 0 || currIndex < noOfProcess) {
-//         if (processes[currIndex]->at > currTime) {
-//             printf("Was Idle from %d to %d\n", currTime, processes[currIndex]->at);
-//             currTime = processes[currIndex]->at;
-//             continue;
-//         }
-//         int temp = currIndex;
-//         while (temp < noOfProcess && processes[temp]->at <= currTime) {
-//             insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnBT);
-//             temp++;
-//         }
-//         currIndex = temp;
-//         processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnBT);
-//         currProcess->frt = currTime;
-//         printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->bt + currTime);
-//         currProcess->wt = currTime - currProcess->at;
-//         currTime += currProcess->bt;
-//         currProcess->ct = currTime;
-//     }
-//     calculateTT(processes, noOfProcess);
-// }
 void RRAlgo(processProperties **processes, int noOfProcess) {
     queue *q = malloc(sizeof(queue));
     intializeQueue(q);
