@@ -56,13 +56,12 @@ int noOfDigits(int n) {
     return count;
 }
 void printProcesses(queue *q) {
-    char *headings[] = {"Process ID", "Arrival Time", "Burst Time", "Period", "Priority", "First Response Time", "Completion Time", "Turn-around Time", "Waiting Time"};
+    char *headings[] = {"Process ID", "Arrival Time", "Burst Time", "Period", "Priority", "Reamining time", "dead line", "First Response Time", "Completion Time", "Turn-around Time", "Waiting Time"};
     int maxSizeForFormatting[M] = {0};
     for (int i = 0; i < M; i++) {
         if (i == 5 || i == 6) continue;
         maxSizeForFormatting[i] = max(maxSizeForFormatting[i], strlen(headings[i]));
     }
-    printf("HERE\n");
     lptr T = q->f;
     while (T != NULL) {
         for (int i = 0; i < M; i++) {
@@ -128,20 +127,20 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
         while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= currTime) {
             peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
             insertIntoPQ(peekProcess, heap, sizeof(peekProcess), &heapSize, compareBasedOnDL);
-            printf("no left=%d\n", noLeft);
             processProperties *nextProcess = NULL;
             nextProcess = malloc(sizeof(processProperties));
-            printf("pid=%d\n", peekProcess->pid);
             intializeProperties(nextProcess);
             getNext(&peekProcess, &nextProcess);
             insertIntoPQ(nextProcess, processes, sizeof(nextProcess), &noOfProcess, compareBasedOnAT);
             peekProcess = peekPQ(processes);
         }
         processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
-        if (currProcess->rt == currProcess->bt)
+        if (currProcess->rt == currProcess->bt) {
             currProcess->frt = currTime;
+            currProcess->ct = currTime;
+        }
         int tempTime = currTime;
-        currProcess->wt += currTime - currProcess->ct;
+        currProcess->wt += tempTime - currProcess->ct;
         int countIterations = 0;
         while (noOfProcess) {
             peekProcess = peekPQ(processes);
@@ -188,7 +187,6 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
             currProcess->ct = tempTime;
         }
         printf("Process P%d from %d to %d\n", currProcess->pid, currTime, tempTime);
-        currProcess->wt = currTime - currProcess->ct;
         currTime = tempTime;
         currProcess->ct = currTime;
     }
