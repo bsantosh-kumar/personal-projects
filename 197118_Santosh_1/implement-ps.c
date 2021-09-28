@@ -60,8 +60,8 @@ int main(int argc, char** argv) {
             processName[strlen(processName) - 1] = '\0';
             if (ttyCurr)
                 printf(FORMAT, pidString, ttyCurr + 5, currTime, processName + 1);
-            else
-                printf(FORMAT, pidString, "?", currTime, processName + 1);
+            // else
+            //     printf(FORMAT, pidString, "?", currTime, processName + 1);
 
             // printf("%s here \n", d->d_name);
             fclose(currStat);

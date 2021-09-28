@@ -2,4 +2,3 @@ In file1
 Some text in file 1
 Extra text in file 1
 There is this line with file1
-In file5
