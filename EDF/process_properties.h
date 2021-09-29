@@ -48,7 +48,6 @@ void intializeProperties(processProperties *currProcess) {
     currProcess->allProperties[10] = &(currProcess->wt);
 }
 void getNext(processProperties **from, processProperties **to) {
-    printf("here1\n");
     (*to) = malloc(sizeof(processProperties));
     intializeProperties(*to);
     for (int i = 0; i < M; i++) {
