@@ -37,6 +37,8 @@
         "xlocnum": "cpp",
         "xstring": "cpp",
         "xutility": "cpp",
-        "queue.h": "c"
+        "queue.h": "c",
+        "process_properties.h": "c",
+        "priority_queue.h": "c"
     }
 }

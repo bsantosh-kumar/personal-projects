@@ -1,1 +1,3 @@
-test
+#ifndef __PRIORITY__QUEUE__SAN__
+#define __PRIORITY__QUEUE__SAN__ $x $(cat ./test.txt)
+#endif

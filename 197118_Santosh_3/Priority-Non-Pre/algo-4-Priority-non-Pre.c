@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
+#include "process_properties.h"
 #define N 4
 
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {
@@ -107,11 +108,11 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
         }
         int temp = currIndex;
         while (temp < noOfProcess && processes[temp]->at <= currTime) {
-            insertIntoPQ(processes[temp], heap, &heapSize, compareBasedOnPri);
+            insertIntoPQ(processes[temp], heap, sizeof(processes[temp]), &heapSize, compareBasedOnPri);
             temp++;
         }
         currIndex = temp;
-        processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnPri);
+        processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnPri);
         currProcess->wt = currTime - currProcess->at;
         currProcess->frt = currTime;
         int tempTime = currTime;
