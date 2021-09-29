@@ -1,9 +1,9 @@
+#ifndef __QUEUE__SAN__
+#define __QUEUE__SAN__
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "process_properties.h"
-#ifndef __QUEUE__SAN__
-#define __QUEUE__SAN__
 
 struct llNode_t {
     processProperties *data;

@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
 #ifndef __PRIORITY__QUEUE__SAN__
 #define __PRIORITY__QUEUE__SAN__
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "process_properties.h"
 void swap(processProperties **x, processProperties **y) {
     processProperties *temp = (*x);

@@ -1,3 +1,5 @@
+#ifndef __QUEUE__SAN__
+#define __QUEUE__SAN__
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -55,3 +57,4 @@ processProperties *dequeue(queue *q) {
     if (ans != NULL) q->nfe--;
     return ans;
 }
+#endif

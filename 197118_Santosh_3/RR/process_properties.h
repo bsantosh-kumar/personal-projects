@@ -1,3 +1,6 @@
+
+#ifndef __PROCESS__PROPERTIES__SAN__
+#define __PROCESS__PROPERTIES__SAN__
 #define M 8
 #define max(a, b) \
     ({ __typeof__ (a) _a = (a); \
@@ -46,3 +49,4 @@ void copy(processProperties *from, processProperties *to) {
         *(to->allProperties[i]) = *(from->allProperties[i]);
     }
 }
+#endif

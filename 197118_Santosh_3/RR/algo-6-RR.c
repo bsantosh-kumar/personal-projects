@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "process_properties.h"
 #include "queue.h"
 #define N 3
 #define TQ 2

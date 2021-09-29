@@ -1,13 +1,11 @@
+
+#ifndef __PROCESS__PROPERTIES__SAN__
+#define __PROCESS__PROPERTIES__SAN__
 #define M 7
 #define max(a, b) \
     ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a > _b ? _a : _b; })
-void swap(void **x, void **y) {
-    void *temp = (*x);
-    (*x) = (*y);
-    (*y) = temp;
-}
 
 struct processProperties_t {
     int pid;               //process id
@@ -41,3 +39,4 @@ void copy(processProperties *from, processProperties *to) {
         *(to->allProperties[i]) = *(from->allProperties[i]);
     }
 }
+#endif

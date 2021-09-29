@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
+#include "process_properties.h"
 #define N 3
 
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {
@@ -104,11 +105,11 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
         }
         int tempIndex = currIndex;
         while (tempIndex < noOfProcess && processes[tempIndex]->at <= currTime) {
-            insertIntoPQ(processes[tempIndex], heap, &heapSize, compareBasedOnRT);
+            insertIntoPQ(processes[tempIndex], heap, sizeof(processes[tempIndex]), &heapSize, compareBasedOnRT);
             tempIndex++;
         }
         currIndex = tempIndex;
-        processProperties *currProcess = extractMinProcess(heap, &heapSize, compareBasedOnRT);
+        processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnRT);
         if (currProcess->rt == currProcess->bt)
             currProcess->frt = currTime;
         int tempTime = currTime;
@@ -128,12 +129,12 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
             currProcess->ct = tempTime;
             if (compareBasedOnRT(currProcess, processes[tempIndex])) {
                 while (tempIndex < noOfProcess && processes[tempIndex]->at <= tempTime) {
-                    insertIntoPQ(processes[tempIndex], heap, &heapSize, compareBasedOnRT);
+                    insertIntoPQ(processes[tempIndex], heap, sizeof(processes[tempIndex]), &heapSize, compareBasedOnRT);
                     tempIndex++;
                 }
                 continue;
             } else {
-                insertIntoPQ(currProcess, heap, &heapSize, compareBasedOnRT);
+                insertIntoPQ(currProcess, heap, sizeof(currProcess), &heapSize, compareBasedOnRT);
                 break;
             }
         }

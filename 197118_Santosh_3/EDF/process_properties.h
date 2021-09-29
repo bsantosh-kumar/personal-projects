@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
 #ifndef __PROCESS__PROPERTIES__SAN__
 #define __PROCESS__PROPERTIES__SAN__
+#include <stdio.h>
+#include <stdlib.h>
 #define M 11
 #define max(a, b) \
     ({ __typeof__ (a) _a = (a); \

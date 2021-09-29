@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
+#include "process_properties.h"
 #define N 3
 
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {

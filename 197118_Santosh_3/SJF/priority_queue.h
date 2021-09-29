@@ -1,3 +1,6 @@
+
+#ifndef __PRIORITY__QUEUE__SAN__
+#define __PRIORITY__QUEUE__SAN__
 #include <stdio.h>
 
 void swap(void **x, void **y) {
@@ -47,3 +50,4 @@ void *extractMinProcess(void **heap, int eleSize, int *s, bool *cmp(void *, void
     }
     return n;
 }
+#endif
