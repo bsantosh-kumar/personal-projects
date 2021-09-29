@@ -2,6 +2,9 @@
 #include <stdlib.h>
 
 #include "process_properties.h"
+#ifndef __QUEUE__SAN__
+#define __QUEUE__SAN__
+
 struct llNode_t {
     processProperties *data;
     struct llNode_t *next;
@@ -72,3 +75,4 @@ void copyQueue(processProperties ***p, queue *q) {
         T = T->next;
     }
 }
+#endif

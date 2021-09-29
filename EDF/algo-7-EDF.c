@@ -8,7 +8,6 @@
 #include "priority_queue.h"
 #include "process_properties.h"
 #include "queue.h"
-// #include "process_properties.h"
 #define N 5
 #define MNP 4  //maximum number of process
 #define PID 1
@@ -45,7 +44,7 @@ void takeInput(processProperties ***processes, char fileName[], int *noOfProcess
         // scanf("%d", &temp);
         currProcess->rt = currProcess->bt;
         currProcess->dl = currProcess->at;
-        insertIntoPQ(currProcess, (void **)(*processes), sizeof(processProperties *), noOfProcess, compareBasedOnAT);
+        insertIntoPQ(currProcess, (*processes), sizeof(processProperties *), noOfProcess, compareBasedOnAT);
     }
 }
 int noOfDigits(int n) {
@@ -117,25 +116,29 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
     int currTime = 0;
     int noLeft = MNP;
     while (noLeft) {
-        processProperties *peekProcess = peekPQ((void **)processes);
+        processProperties *peekProcess = peekPQ(processes);
 
         if ((peekProcess != NULL && peekProcess->at > currTime) && heapSize == 0) {
             printf("Was Idle from %d to %d\n", currTime, peekProcess->at);
             currTime = peekProcess->at;
             continue;
         }
+        int temp = currIndex;
         while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= currTime) {
-            peekProcess = extractMinProcess((void **)processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
-            insertIntoPQ(peekProcess, (void **)heap, sizeof(peekProcess), &heapSize, compareBasedOnDL);
+            peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+            insertIntoPQ(peekProcess, heap, sizeof(peekProcess), &heapSize, compareBasedOnDL);
             processProperties *nextProcess = NULL;
+            printf("before\n");
+            printf("Size=%d\n", sizeof(processProperties));
+            malloc(136);
+            printf("After\n");
             nextProcess = malloc(sizeof(processProperties));
-            printf("over here\n");
             intializeProperties(nextProcess);
             getNext(&peekProcess, &nextProcess);
-            insertIntoPQ(nextProcess, (void **)processes, sizeof(nextProcess), &noOfProcess, compareBasedOnAT);
-            peekProcess = peekPQ((void **)processes);
+            insertIntoPQ(nextProcess, processes, sizeof(nextProcess), &noOfProcess, compareBasedOnAT);
+            peekProcess = peekPQ(processes);
         }
-        processProperties *currProcess = extractMinProcess((void **)heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+        processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
         if (currProcess->rt == currProcess->bt) {
             currProcess->frt = currTime;
             currProcess->ct = currTime;
@@ -144,7 +147,7 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
         currProcess->wt += tempTime - currProcess->ct;
         int countIterations = 0;
         while (noOfProcess) {
-            peekProcess = peekPQ((void **)processes);
+            peekProcess = peekPQ(processes);
             if (currProcess->rt == 0) {
                 if (currProcess->pid == PID) {
                     noLeft--;
@@ -168,17 +171,17 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
             currProcess->ct = tempTime;
             if (compareBasedOnDL(currProcess, peekProcess)) {
                 while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= tempTime) {
-                    peekProcess = extractMinProcess((void **)processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
-                    insertIntoPQ(peekProcess, (void **)heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+                    peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+                    insertIntoPQ(peekProcess, heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
                     processProperties *nextProcess = malloc(sizeof(processProperties));
                     intializeProperties(nextProcess);
                     getNext(&peekProcess, &nextProcess);
-                    insertIntoPQ(nextProcess, (void **)processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
-                    peekProcess = peekPQ((void **)processes);
+                    insertIntoPQ(nextProcess, processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+                    peekProcess = peekPQ(processes);
                 }
                 continue;
             } else {
-                insertIntoPQ(currProcess, (void **)heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+                insertIntoPQ(currProcess, heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
                 break;
             }
         }
@@ -203,6 +206,7 @@ int main() {
         finalAns[i] = NULL;
     }
     queue *q = malloc(sizeof(queue));
+    intializeQueue(q);
     SJFAlgo(processes, noOfProcess, q);
     printProcesses(q);
 

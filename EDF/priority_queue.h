@@ -2,45 +2,49 @@
 #include <stdlib.h>
 #ifndef __PRIORITY__QUEUE__SAN__
 #define __PRIORITY__QUEUE__SAN__
-void swap(void **x, void **y) {
-    void *temp = (*x);
+#include "process_properties.h"
+void swap(processProperties **x, processProperties **y) {
+    processProperties *temp = (*x);
     (*x) = (*y);
     (*y) = temp;
 }
-void insertIntoPQ(void *n, void **heap, int eleSize, int *s, bool (*cmp)(void *, void *)) {
+void insertIntoPQ(processProperties *n, processProperties **heap, int eleSize, int *s, bool (*cmp)(processProperties *, processProperties *)) {
     int i = (*s), j;
-    *(heap + i * eleSize) = n;
+    // heap[i] = malloc(sizeof(processProperties));
+    // intializeProperties(heap[i]);
+    // copy(n, heap[i]);
+    heap[i] = n;
     while (i > 0) {
         j = i;
         i = (i - 1) / 2;
-        if (cmp(*(heap + j * eleSize), *(heap + i * eleSize)))
-            swap((heap + j * eleSize), (heap + i * eleSize));
+        if (cmp(heap[j], heap[i]))
+            swap(&heap[j], &heap[i]);
         else
             break;
     }
     (*s)++;
 }
-void *extractMinProcess(void **heap, int eleSize, int *s, bool (*cmp)(void *, void *)) {
+processProperties *extractMinProcess(processProperties **heap, int eleSize, int *s, bool (*cmp)(processProperties *, processProperties *)) {
     if ((*s) == 0)
         return NULL;
     int i = 0, j = 1, k = 2;
-    void *n = *(heap + 0 * eleSize);
-    *(heap + 0 * eleSize) = *(heap + ((*s) - 1) * eleSize);
+    processProperties *n = heap[0];
+    heap[0] = heap[(*s) - 1];
     (*s)--;
     while (j < (*s)) {
-        if ((!cmp(*(heap + i * eleSize), *(heap + j * eleSize))) && k < (*s) && (!cmp(*(heap + i * eleSize), *(heap + k * eleSize)))) {
-            if (cmp(*(heap + j * eleSize), *(heap + k * eleSize))) {
-                swap((heap + j * eleSize), (heap + i * eleSize));
+        if ((!cmp(heap[i], heap[j])) && k < (*s) && (!cmp(heap[i], heap[k]))) {
+            if (cmp(heap[j], heap[k])) {
+                swap(&heap[j], &heap[i]);
                 i = j;
             } else {
-                swap((heap + k * eleSize), (heap + i * eleSize));
+                swap(&heap[k], &heap[i]);
                 i = k;
             }
-        } else if (!cmp(*(heap + i * eleSize), *(heap + j * eleSize))) {
-            swap((heap + j * eleSize), (heap + i * eleSize));
+        } else if (!cmp(heap[i], heap[j])) {
+            swap(&heap[j], &heap[i]);
             i = j;
-        } else if (k < (*s) && (!cmp(*(heap + i * eleSize), *(heap + k * eleSize)))) {
-            swap((heap + k * eleSize), (heap + i * eleSize));
+        } else if (k < (*s) && (!cmp(heap[i], heap[k]))) {
+            swap(&heap[k], &heap[i]);
             i = k;
         } else
             break;
@@ -49,6 +53,7 @@ void *extractMinProcess(void **heap, int eleSize, int *s, bool (*cmp)(void *, vo
     }
     return n;
 }
+
 void *peekPQ(void **heap) {
     return *(heap);
 }
