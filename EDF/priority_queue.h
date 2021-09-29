@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#ifndef __PRIORITY__QUEUE__SAN__
+#define __PRIORITY__QUEUE__SAN__
 void swap(void **x, void **y) {
     void *temp = (*x);
     (*x) = (*y);
     (*y) = temp;
 }
-void insertIntoPQ(void *n, void **heap, int eleSize, int *s, bool *cmp(void *, void *)) {
+void insertIntoPQ(void *n, void **heap, int eleSize, int *s, bool (*cmp)(void *, void *)) {
     int i = (*s), j;
     *(heap + i * eleSize) = n;
     while (i > 0) {
@@ -19,7 +20,7 @@ void insertIntoPQ(void *n, void **heap, int eleSize, int *s, bool *cmp(void *, v
     }
     (*s)++;
 }
-void *extractMinProcess(void **heap, int eleSize, int *s, bool *cmp(void *, void *)) {
+void *extractMinProcess(void **heap, int eleSize, int *s, bool (*cmp)(void *, void *)) {
     if ((*s) == 0)
         return NULL;
     int i = 0, j = 1, k = 2;
@@ -57,3 +58,4 @@ void copyPQ(void **from, void ***to, int s, int eleSize) {
         *((*to) + i * eleSize) = *(from + i * eleSize);
     }
 }
+#endif

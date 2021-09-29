@@ -6,8 +6,18 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
-#define N 3
-
+#include "queue.h"
+// #include "process_properties.h"
+#define N 5
+#define MNP 4  //maximum number of process
+#define PID 1
+bool compareBasedOnAT(void *a, void *b) {
+    processProperties *_a = (processProperties *)(a);
+    processProperties *_b = (processProperties *)(b);
+    if (_a->at != _b->at)
+        return _a->at < _b->at;
+    return _a->pri < _b->pri;
+}
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {
     FILE *inputFile = fopen(fileName, "r");
     int count = 0;
@@ -21,33 +31,182 @@ void takeInput(processProperties ***processes, char fileName[], int *noOfProcess
         exit(EXIT_FAILURE);
     }
     fseek(inputFile, 0, SEEK_SET);
-    (*processes) = (processProperties **)malloc((count / N) * sizeof(processProperties *));
+    (*processes) = (processProperties **)malloc((MNP * (count / N) + 1) * sizeof(processProperties *));
+    (*noOfProcess) = 0;
     for (int i = 0; i < count / N; i++) {
-        (*processes)[i] = malloc(sizeof(processProperties));
-        intializeProperties((*processes)[i]);
+        (*processes)[*noOfProcess] = malloc(sizeof(processProperties));
+        processProperties *currProcess = (*processes)[*noOfProcess];
+        intializeProperties(currProcess);
         for (int j = 0; j < N; j++) {
-            fscanf(inputFile, "%d", (*processes)[i]->allProperties[j]);
+            fscanf(inputFile, "%d", (currProcess->allProperties[j]));
+        }
+        // int temp;
+        // scanf("%d", &temp);
+        currProcess->rt = currProcess->bt;
+        currProcess->dl = currProcess->at;
+        insertIntoPQ(currProcess, (*processes), sizeof(processProperties *), noOfProcess, compareBasedOnAT);
+    }
+}
+int noOfDigits(int n) {
+    int count = 0;
+    while (n > 0) {
+        count++;
+        n /= 10;
+    }
+    return count;
+}
+void printProcesses(queue *q) {
+    char *headings[] = {"Process ID", "Arrival Time", "Burst Time", "Period", "Priority", "Reamining time", "dead line", "First Response Time", "Completion Time", "Turn-around Time", "Waiting Time"};
+    int maxSizeForFormatting[M] = {0};
+    for (int i = 0; i < M; i++) {
+        if (i == 5 || i == 6) continue;
+        maxSizeForFormatting[i] = max(maxSizeForFormatting[i], strlen(headings[i]));
+    }
+    printf("Here\n");
+    printf("HERE\n");
+    lptr T = q->f;
+    while (T != NULL) {
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
+                if (j == 5 || j == 6) continue;
+                maxSizeForFormatting[i] = max(maxSizeForFormatting[i], noOfDigits(*(T->data->allProperties[j])));
+            }
+        }
+        T = T->next;
+    }
+    for (int i = 0; i < M; i++) {
+        if (i == 5 || i == 6) continue;
+        maxSizeForFormatting[i] += 2;
+        printf("%*s", maxSizeForFormatting[i], headings[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < M; i++) {
+        if (i == 5 || i == 6) continue;
+        for (int j = 0; j < maxSizeForFormatting[i]; j++) {
+            printf("-");
         }
     }
-    (*noOfProcess) = count / N;
+    printf("\n");
+    T = q->f;
+    while (T != NULL) {
+        for (int j = 0; j < M; j++) {
+            if (j == 5 || j == 6) continue;
+            printf("%*d", maxSizeForFormatting[j], *(T->data->allProperties[j]));
+        }
+        T = T->next;
+        printf("\n");
+    }
 }
+bool compareBasedOnDL(void *a, void *b) {
+    processProperties *_a = (processProperties *)a;
+    processProperties *_b = (processProperties *)b;
+    if (_a->pri != _b->pri)
+        return _a->pri < _b->pri;
+    return _a->at < _b->at;
+}
+void calculateTT(queue *q) {
+    lptr T = q->f;
+    while (T != NULL) {
+        T->data->tt = T->data->ct - T->data->at;
+        T = T->next;
+    }
+}
+void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
+    processProperties **heap = malloc((2 * MNP * noOfProcess + 1) * sizeof(processProperties *));
+    int heapSize = 0;
+    int currIndex = 0;
+    int currTime = 0;
+    int noLeft = MNP;
+    while (noLeft) {
+        processProperties *peekProcess = peekPQ(processes);
 
-bool compareBasedOnRT(processProperties *a, processProperties *b) {
-    return a->bt < b->bt;
+        if ((peekProcess != NULL && peekProcess->at > currTime) && heapSize == 0) {
+            printf("Was Idle from %d to %d\n", currTime, peekProcess->at);
+            currTime = peekProcess->at;
+            continue;
+        }
+        int temp = currIndex;
+        while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= currTime) {
+            peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+            insertIntoPQ(peekProcess, heap, sizeof(peekProcess), &heapSize, compareBasedOnDL);
+            printf("no left=%d\n", noLeft);
+            processProperties *nextProcess = NULL;
+            nextProcess = malloc(sizeof(processProperties));
+            printf("pid=%d\n", peekProcess->pid);
+            intializeProperties(nextProcess);
+            getNext(&peekProcess, &nextProcess);
+            insertIntoPQ(nextProcess, processes, sizeof(nextProcess), &noOfProcess, compareBasedOnAT);
+            peekProcess = peekPQ(processes);
+        }
+        processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+        if (currProcess->rt == currProcess->bt)
+            currProcess->frt = currTime;
+        int tempTime = currTime;
+        currProcess->wt += currTime - currProcess->ct;
+        int countIterations = 0;
+        while (noOfProcess) {
+            peekProcess = peekPQ(processes);
+            if (currProcess->rt == 0) {
+                if (currProcess->pid == PID) {
+                    noLeft--;
+                }
+                currProcess->ct = tempTime;
+                enqueue(q, currProcess);
+                break;
+            }
+            if (currProcess->rt <= peekProcess->at - tempTime) {
+                if (currProcess->pid == PID) {
+                    noLeft--;
+                }
+                tempTime += currProcess->rt;
+                currProcess->ct = tempTime;
+                enqueue(q, currProcess);
+                break;
+            }
+
+            currProcess->rt -= peekProcess->at - tempTime;
+            tempTime = peekProcess->at;
+            currProcess->ct = tempTime;
+            if (compareBasedOnDL(currProcess, peekProcess)) {
+                while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= tempTime) {
+                    peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+                    insertIntoPQ(peekProcess, heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+                    processProperties *nextProcess = malloc(sizeof(processProperties));
+                    intializeProperties(nextProcess);
+                    getNext(&peekProcess, &nextProcess);
+                    insertIntoPQ(nextProcess, processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
+                    peekProcess = peekPQ(processes);
+                }
+                continue;
+            } else {
+                insertIntoPQ(currProcess, heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
+                break;
+            }
+        }
+        if (noOfProcess == 0) {
+            tempTime += currProcess->rt;
+            currProcess->rt = 0;
+            currProcess->ct = tempTime;
+        }
+        printf("Process P%d from %d to %d\n", currProcess->pid, currTime, tempTime);
+        currProcess->wt = currTime - currProcess->ct;
+        currTime = tempTime;
+        currProcess->ct = currTime;
+    }
+    calculateTT(q);
 }
 int main() {
     processProperties **processes = NULL;
     int noOfProcess = 0;
-    takeInput(&processes, "input-SJF.txt", &noOfProcess);
-    int n;
-    processProperties **heap = malloc((2 * noOfProcess + 1) * sizeof(processProperties *));
-    int heapSize = 0;
-    for (int i = 0; i < noOfProcess; i++) {
-        insertIntoPQ(processes[i], heap, &heapSize, compareBasedOnRT);
+    takeInput(&processes, "input-EDF.txt", &noOfProcess);
+    int noOf = 0;
+    processProperties **finalAns = malloc(sizeof(processProperties *) * (2 * MNP * noOfProcess));
+    for (int i = 0; i < (2 * MNP * noOfProcess); i++) {
+        finalAns[i] = NULL;
     }
-    while (heapSize) {
-        processProperties *temp = extractMinProcess(heap, &heapSize, compareBasedOnRT);
-    }
+    queue *q = malloc(sizeof(queue));
+    SJFAlgo(processes, noOfProcess, q);
+    printProcesses(q);
 
     return 0;
 }
