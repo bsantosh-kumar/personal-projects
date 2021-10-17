@@ -8,7 +8,7 @@
 #include "process_properties.h"
 #include "queue.h"
 #define N 3
-#define TQ 2
+#define TQ 2  //Time Quantum
 void takeInput(processProperties ***processes, char fileName[], int *noOfProcess) {
     FILE *inputFile = fopen(fileName, "r");
     int count = 0;
@@ -112,8 +112,9 @@ void RRAlgo(processProperties **processes, int noOfProcess) {
         processProperties *currProcess = dequeue(q);
         if (currProcess->ct == 0) {
             currProcess->frt = currTime;
-            currProcess->ct = currTime;
+            currProcess->ct = currProcess->at;
         }
+        if (currProcess->rt == 0) continue;
         currProcess->wt += currTime - currProcess->ct;
         int tempTime = currTime;
         if (currProcess->rt <= TQ) {
@@ -127,8 +128,13 @@ void RRAlgo(processProperties **processes, int noOfProcess) {
         tempTime += TQ;
         currProcess->rt -= TQ;
         currProcess->ct = tempTime;
+        while (tempIndex < noOfProcess && processes[tempIndex]->at < tempTime) {
+            enqueue(q, processes[tempIndex]);
+            tempIndex++;
+        }
         printf("Executing process P%d from %d to %d\n", currProcess->pid, currTime, currProcess->ct);
-        enqueue(q, currProcess);
+        if (currProcess->rt > 0)
+            enqueue(q, currProcess);
         currTime = tempTime;
     }
 

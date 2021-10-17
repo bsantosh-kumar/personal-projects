@@ -110,8 +110,10 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
         }
         currIndex = tempIndex;
         processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnRT);
-        if (currProcess->rt == currProcess->bt)
+        if (currProcess->rt == currProcess->bt) {
             currProcess->frt = currTime;
+            currProcess->ct = currProcess->at;
+        }
         int tempTime = currTime;
         currProcess->wt += currTime - currProcess->ct;
         while (tempIndex < noOfProcess) {

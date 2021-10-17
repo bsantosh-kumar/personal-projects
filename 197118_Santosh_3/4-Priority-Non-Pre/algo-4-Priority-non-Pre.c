@@ -101,7 +101,7 @@ void SJFAlgo(processProperties **processes, int noOfProcess) {
     int currIndex = 0;
     int currTime = 0;
     while (heapSize != 0 || currTime == 0 || currIndex < noOfProcess) {
-        if (currIndex < noOfProcess && processes[currIndex]->at > currTime) {
+        if (currIndex < noOfProcess && heapSize == 0 && processes[currIndex]->at > currTime) {
             printf("Was Idle from %d to %d\n", currTime, processes[currIndex]->at);
             currTime = processes[currIndex]->at;
             continue;
