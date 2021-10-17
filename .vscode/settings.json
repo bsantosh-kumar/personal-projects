@@ -39,6 +39,7 @@
         "xutility": "cpp",
         "queue.h": "c",
         "process_properties.h": "c",
-        "priority_queue.h": "c"
+        "priority_queue.h": "c",
+        "*.tcc": "c"
     }
 }
