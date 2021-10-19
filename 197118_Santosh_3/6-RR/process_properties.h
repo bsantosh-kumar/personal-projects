@@ -6,14 +6,6 @@
     ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a > _b ? _a : _b; })
-#define swap(x, y)        \
-    ({                    \
-        typeof(x) _x = x; \
-        typeof(y) _y = y; \
-        x = _y;           \
-        y = _x;           \
-    })
-
 struct processProperties_t {
     int pid;               //process id
     int at;                //arrival time

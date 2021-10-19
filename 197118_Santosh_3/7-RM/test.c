@@ -6,8 +6,8 @@
 #include <unistd.h>
 
 #include "priority_queue.h"
-#include "process_properties.h"
 #include "queue.h"
+// #include "process_properties.h"
 #define N 5
 #define MNP 4  //maximum number of process
 #define PID 1
@@ -62,6 +62,8 @@ void printProcesses(queue *q) {
         if (i == 5 || i == 6) continue;
         maxSizeForFormatting[i] = max(maxSizeForFormatting[i], strlen(headings[i]));
     }
+    printf("Here\n");
+    printf("HERE\n");
     lptr T = q->f;
     while (T != NULL) {
         for (int i = 0; i < M; i++) {
@@ -109,7 +111,7 @@ void calculateTT(queue *q) {
         T = T->next;
     }
 }
-void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
+void EDFAlgo(processProperties **processes, int noOfProcess, queue *q) {
     processProperties **heap = malloc((2 * MNP * noOfProcess + 1) * sizeof(processProperties *));
     int heapSize = 0;
     int currIndex = 0;
@@ -127,24 +129,20 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
         while (noOfProcess != 0 && peekProcess != NULL && peekProcess->at <= currTime) {
             peekProcess = extractMinProcess(processes, sizeof(processes[0]), &noOfProcess, compareBasedOnAT);
             insertIntoPQ(peekProcess, heap, sizeof(peekProcess), &heapSize, compareBasedOnDL);
+            printf("no left=%d\n", noLeft);
             processProperties *nextProcess = NULL;
-            printf("before\n");
-            printf("Size=%d\n", sizeof(processProperties));
-            malloc(136);
-            printf("After\n");
             nextProcess = malloc(sizeof(processProperties));
+            printf("pid=%d\n", peekProcess->pid);
             intializeProperties(nextProcess);
             getNext(&peekProcess, &nextProcess);
             insertIntoPQ(nextProcess, processes, sizeof(nextProcess), &noOfProcess, compareBasedOnAT);
             peekProcess = peekPQ(processes);
         }
         processProperties *currProcess = extractMinProcess(heap, sizeof(heap[0]), &heapSize, compareBasedOnDL);
-        if (currProcess->rt == currProcess->bt) {
+        if (currProcess->rt == currProcess->bt)
             currProcess->frt = currTime;
-            currProcess->ct = currTime;
-        }
         int tempTime = currTime;
-        currProcess->wt += tempTime - currProcess->ct;
+        currProcess->wt += currTime - currProcess->ct;
         int countIterations = 0;
         while (noOfProcess) {
             peekProcess = peekPQ(processes);
@@ -191,6 +189,7 @@ void SJFAlgo(processProperties **processes, int noOfProcess, queue *q) {
             currProcess->ct = tempTime;
         }
         printf("Process P%d from %d to %d\n", currProcess->pid, currTime, tempTime);
+        currProcess->wt = currTime - currProcess->ct;
         currTime = tempTime;
         currProcess->ct = currTime;
     }
@@ -206,8 +205,7 @@ int main() {
         finalAns[i] = NULL;
     }
     queue *q = malloc(sizeof(queue));
-    intializeQueue(q);
-    SJFAlgo(processes, noOfProcess, q);
+    EDFAlgo(processes, noOfProcess, q);
     printProcesses(q);
 
     return 0;
