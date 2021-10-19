@@ -40,6 +40,9 @@
         "queue.h": "c",
         "process_properties.h": "c",
         "priority_queue.h": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "new": "c",
+        "numeric": "c",
+        "system_error": "c"
     }
 }
