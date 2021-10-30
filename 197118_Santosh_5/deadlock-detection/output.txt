@@ -1,0 +1,74 @@
+Intialised all of the vairables
+Kernel Resources:
+
+index:-1
+Maximum resources
+8 9 5 
+Allocated resources
+8 9 5 
+Need resources
+0 0 0 
+
+Came here i:0
+
+
+index:0
+Maximum resources
+5 8 3 
+Allocated resources
+0 0 0 
+Need resources
+5 8 3 
+
+Came here i:1
+
+
+index:1
+Maximum resources
+7 9 1 
+Allocated resources
+0 0 0 
+Need resources
+7 9 1 
+
+Came here i:2
+
+
+index:2
+Maximum resources
+4 8 1 
+Allocated resources
+0 0 0 
+Need resources
+4 8 1 
+
+pid: 0
+Process:0 is requesting resources
+The request being:
+2 8 3 
+pid: 2
+0 is requesting for more resources than Need, starting termination of process.Process:2 is requesting resources
+The request being:
+3 7 1 
+pid: 1
+Inside kernel termination
+Process:1 is requesting resources
+The request being:
+4 2 0 
+Kernel terminated the process:0
+Deadlock state reached, so exiting
+s than Need, starting termination of process.Inside kernel termination
+Kernel terminated the process:2
+Deadlock state reached, so exiting
+more resources than Need, starting termination of process.Inside kernel termination
+Kernel terminated the process:1
+Taking all resources from process:1
+With kernel resources:5 1 6 
+Max Res[]=5 3 2 
+Done taking all resources from process:1
+,with kernel resoruces:10 4 8 
+2 is requesting for more resources than Need, starting termination of process.Inside kernel termination
+Kernel terminated the process:2
+Deadlock state reached, so exiting
+g
+ing
