@@ -32,12 +32,21 @@ struct request_resources_t {
 typedef struct request_resources_t request_resources;
 typedef request_resources *rrPtr;  // pointer for request resources
 
+struct process_utility_t {
+    prPtr process_resources;
+    rrPtr request;
+    sem_t processSem;
+};
+typedef struct process_utility_t process_utility;
+typedef process_utility *puPtr;
+
 struct allResources_t {
     prPtr kernelRes;
     puPtr *allProcesses;
 };
 typedef struct allResources_t allResources;
 typedef allResources *arPtr;
+
 /*
     Intialize request_resources structure
 */
@@ -52,14 +61,6 @@ void request_resources_init(rrPtr *currRequest, prPtr process) {
     }
     return;
 }
-
-struct process_utility_t {
-    prPtr process_resources;
-    rrPtr request;
-    sem_t processSem;
-};
-typedef struct process_utility_t process_utility;
-typedef process_utility *puPtr;
 
 void process_resources_init(prPtr *currProcess, int maxResources[], int pid) {
     (*currProcess) = (process_resources *)malloc(sizeof(process_resources));
