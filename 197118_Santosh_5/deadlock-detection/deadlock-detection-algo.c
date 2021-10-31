@@ -138,8 +138,9 @@ void copyResources(prPtr *from, prPtr *to) {
 bool isLessThan(int process[], int avialable[]) {
     for (int i = 0; i < N; i++) {
         // if the need is greater than currently avialable then we cannot allocate
-        if (avialable[i] < process[i])
+        if (avialable[i] < process[i]) {
             return false;
+        }
     }
     return true;
 }
@@ -306,7 +307,7 @@ void *simulateProcess(void *_a) {
         sem_wait(&printLock);
         printf("Process: %d sleeping for %d\n", currProcess->process_resources->pid, sleepTime);
         sem_post(&printLock);
-        // sleep(sleepTime);
+        sleep(sleepTime);
         sem_wait(&currProcess->processSem);
         sem_wait(&printLock);
         printf("Process: %d came from sleep\n", currProcess->process_resources->pid);
@@ -420,6 +421,19 @@ void *simulate_kernel(void *_a) {
                 addRequest(allProcesses[i]->process_resources->allocatedRes, allProcesses[i]->request->requestToken);
                 subtractRequest(kernelResources->allocatedRes, allProcesses[i]->request->requestToken);
                 // printRequest(allProcesses[i]->request);
+                allProcesses[i]->request->isRequesting = 0;
+                printAllocatingResources(allProcesses[i]);
+                sem_wait(&printLock);
+                printf("Kernel resources\n");
+                for (int j = 0; j < N; j++) {
+                    printf("%d ", kernelResources->allocatedRes[j]);
+                }
+                printf("\n");
+                sem_post(&printLock);
+                for (int j = 0; j < N; j++) {
+                    allProcesses[i]->request->requestToken[j] = 0;
+                }
+                sem_post(&allProcesses[i]->process_resources->resourceSem);
                 sem_post(&allProcesses[i]->processSem);
             }
         }

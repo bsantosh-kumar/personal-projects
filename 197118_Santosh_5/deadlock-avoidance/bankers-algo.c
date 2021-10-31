@@ -131,8 +131,9 @@ void copyResources(prPtr *from, prPtr *to) {
 bool isLessThan(int process[], int avialable[]) {
     for (int i = 0; i < N; i++) {
         // if the need is greater than currently avialable then we cannot allocate
-        if (avialable[i] < process[i])
+        if (avialable[i] < process[i]) {
             return false;
+        }
     }
     return true;
 }
@@ -299,7 +300,7 @@ void *simulateProcess(void *_a) {
         sem_wait(&printLock);
         printf("Process: %d sleeping for %d\n", currProcess->process_resources->pid, sleepTime);
         sem_post(&printLock);
-        // sleep(sleepTime);
+        sleep(sleepTime);
         sem_wait(&currProcess->processSem);
         sem_wait(&printLock);
         printf("Process: %d came from sleep\n", currProcess->process_resources->pid);
@@ -393,7 +394,7 @@ void *simulate_kernel(void *_a) {
                 sem_post(&allProcesses[i]->processSem);
                 continue;
             } else if (allProcesses[i]->request->isRequesting == 1) {
-                if (!isLessThan(allProcesses[i]->request->requestToken, allProcesses[i]->process_resources->needRes)) {
+                if (!(isLessThan(allProcesses[i]->request->requestToken, allProcesses[i]->process_resources->needRes))) {
                     printMoreThanNeed(allProcesses[i]);
                     terminate_process_from_kernel(allProcesses[i], processThreads[i]);
                     sem_post(&allProcesses[i]->process_resources->resourceSem);
@@ -429,15 +430,7 @@ void *simulate_kernel(void *_a) {
                     addRequest(allProcesses[i]->process_resources->needRes, allProcesses[i]->request->requestToken);
                     subtractRequest(allProcesses[i]->process_resources->allocatedRes, allProcesses[i]->request->requestToken);
                     addRequest(kernelResources->allocatedRes, allProcesses[i]->request->requestToken);
-                    // printCantAllocateNotSafe(allProcesses[i]);
-                    // allProcesses[i]->request->isRequesting = 0;
-                    // allProcesses[i]->request->canAllocate = 0;
-                    // for (int j = 0; j < N; j++) {
-                    //     allProcesses[i]->request->requestToken[j] = 0;
-                    // }
-                    // sem_post(&allProcesses[i]->process_resources->resourceSem);
                 }
-                // printf("Done with process:%d\n", allProcesses[i]->process_resources->pid);
                 sem_post(&allProcesses[i]->processSem);
             }
         }
