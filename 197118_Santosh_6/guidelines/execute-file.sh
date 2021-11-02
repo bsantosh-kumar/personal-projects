@@ -8,7 +8,7 @@ fileName=$(echo "$1.c" )
 gcc ${fileName} -o $1 "-lm" "-pthread"
 p=(1 2 4 8)
 n=()
-if(($1=="matmult"))
+if [ $1 == "matmult" ]
 then
     n=(100)
 else
