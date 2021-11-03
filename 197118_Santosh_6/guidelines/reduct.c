@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #define NN 0x00800000
 
 // int args[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
@@ -44,7 +45,7 @@ void *thread_func(void *arg) {
 int main(int argc, char **argv) {
     int i, mcmodel;
     void *retval;
-    struct timeval t1, t2, t3, t4;
+    clock_t t1, t2, t3, t4;
     pthread_t thr[64];
 
     if (argc != 3) {
@@ -58,19 +59,22 @@ int main(int argc, char **argv) {
     N = atoi(argv[2]);
 
     pthread_barrier_init(&barr, NULL, P);
-    gettimeofday(&t1, NULL);
+    t1 = clock();
     for (i = 1; i < P; i++)
         pthread_create(&thr[i], NULL, thread_func, &args[i]);
-    gettimeofday(&t2, NULL);
+    t2 = clock();
     thread_func(&args[0]);
-    gettimeofday(&t3, NULL);
+    t3 = clock();
 
     // printf("Thread id waiting \n");
     for (i = 1; i < P; i++)
         pthread_join(thr[i], &retval);
-    gettimeofday(&t4, NULL);
+    t4 = clock();
 
     // printf("Time for completion : creation %d, reduction : %d, joining : %d\n", t2.tv_usec - t1.tv_usec, t3.tv_usec - t2.tv_usec, t4.tv_usec - t3.tv_usec);
-    printf("%d\n", (int)t4.tv_usec - (int)t1.tv_usec);
+
+    double timeTaken = (t4 - t1 + 0.0) / CLOCKS_PER_SEC;
+    timeTaken = timeTaken * 1000000.0;
+    printf("%lf\n", timeTaken);
     return 0;
 }

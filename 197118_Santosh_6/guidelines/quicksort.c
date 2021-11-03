@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #define NN 0x500000
 //#define N	0x1000
 #define MINIMUMSIZE 1024
@@ -201,7 +202,7 @@ void *thread_func(void *arg) {
 
 int main(int argc, char **argv) {
     int i, j, mcmodel;
-    struct timeval t1, t2, t3, t4;
+    clock_t t1, t2, t3, t4;
     int t;
     pthread_t thr[64];
 
@@ -236,21 +237,23 @@ int main(int argc, char **argv) {
     }
 
     // Create threads.
-    gettimeofday(&t1, NULL);
+    t1 = clock();
     for (i = 1; i < P; i++)
         pthread_create(&thr[i], NULL, thread_func, &args[i]);
-    gettimeofday(&t2, NULL);
+    t2 = clock();
     thread_func(&args[0]);
-    gettimeofday(&t3, NULL);
+    t3 = clock();
 
     for (i = 1; i < P; i++)
         pthread_join(thr[i], NULL);
 
-    gettimeofday(&t4, NULL);
+    t4 = clock();
 
     //	for (i=0; i<N; i++)
     //		printf("%8d",A[i]);
-    printf("%d\n", (int)t4.tv_usec - (int)t1.tv_usec);
 
+    double timeTaken = (t4 - t1 + 0.0) / CLOCKS_PER_SEC;
+    timeTaken = timeTaken * 1000000.0;
+    printf("%lf\n", timeTaken);
     return 0;
 }

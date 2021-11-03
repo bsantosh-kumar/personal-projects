@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #define NN 0x400000
 //#define SQRTN	2048
 int SQRTN;
@@ -55,7 +56,7 @@ void *strike_factors(void *arg) {
 int main(int argc, char *argv[]) {
     pthread_t thr[64];
     int i, mcmodel;
-    struct timeval t2, t1, t3, t4;
+    clock_t t2, t1, t3, t4;
 
     if (argc != 3) {
         printf("Usage: seive <NOPROC> <NELEMENTS>\n");
@@ -68,18 +69,20 @@ int main(int argc, char *argv[]) {
 
     pthread_mutex_init(&mut, NULL);
     pthread_barrier_init(&barr, NULL, P);
-    gettimeofday(&t1, NULL);
+    t1 = clock();
     for (i = 1; i < P; i++)
         pthread_create(&thr[i], NULL, strike_factors, &args[i]);
 
-    gettimeofday(&t2, NULL);
+    t2 = clock();
     strike_factors(&args[0]);
-    gettimeofday(&t3, NULL);
+    t3 = clock();
 
     for (i = 1; i < P; i++)
         pthread_join(thr[i], NULL);
-    gettimeofday(&t4, NULL);
+    t4 = clock();
 
-    printf("%d\n", (int)t4.tv_usec - (int)t1.tv_usec);
+    double timeTaken = (t4 - t1 + 0.0) / CLOCKS_PER_SEC;
+    timeTaken = timeTaken * 1000000.0;
+    printf("%lf\n", timeTaken);
     return 0;
 }
