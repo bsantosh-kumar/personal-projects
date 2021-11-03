@@ -10,10 +10,11 @@ p=(1 2 4 8)
 n=()
 if [ $1 == "matmult" ]
 then
-    n=(100)
+    n=(128 256 512 1024)
 else
     n=(1000 10000 100000 1000000)
 fi
+
 outputFile=$(echo "$1-output.txt")
 echo -n "" > "${outputFile}"
 for i in "${p[@]}"
