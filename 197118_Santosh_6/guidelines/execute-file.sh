@@ -15,23 +15,23 @@ else
     n=(1000 10000 100000 1000000)
 fi
 
-outputFile=$(echo "$1-output.txt")
+outputFile=$(echo "$1-output.csv")
 echo -n "" > "${outputFile}"
-for i in "${p[@]}"
+echo "Size,Number of threads,Execution time1,Execution time2,Execution time3,Execution time4,Average" >> "${outputFile}"
+for j in "${n[@]}"
 do
-    for j in "${n[@]}"
+    for i in "${p[@]}"
     do
-        echo "thread: $i size:$j" >> "${outputFile}"
+        # echo "thread: $i size:$j" >> "${outputFile}"
         avg=0
+        echo -n "$j,$i," >> "${outputFile}"
         for k in 1 2 3 4
         do 
             curr=$("./$1" $i $j)
-            echo -n "$curr " >>"${outputFile}"
+            echo -n "$curr, " >>"${outputFile}"
             avg=$(echo "$avg" + "$curr" | bc -l)
         done
         avg=$(echo "$avg/4" | bc -l )
-        echo "" >> "${outputFile}"
-        echo "avg:$avg"  >> "${outputFile}"
-        echo "" >> "${outputFile}"
+        echo "$avg"  >> "${outputFile}"
     done 
 done
