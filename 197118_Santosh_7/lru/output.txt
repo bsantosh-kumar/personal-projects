@@ -15,7 +15,6 @@ Current page is:2
 The pages in memory are: 0 1 2 
 
 Current page is:0
-Came hereeeee
 0 is already present in the main memory....
 The pages in memory are: 1 2 0 
 
@@ -24,7 +23,6 @@ Current page is:3
 The pages in memory are: 2 0 3 
 
 Current page is:0
-Came hereeeee
 0 is already present in the main memory....
 The pages in memory are: 2 3 0 
 
@@ -45,12 +43,10 @@ Current page is:0
 The pages in memory are: 2 3 0 
 
 Current page is:3
-Came hereeeee
 3 is already present in the main memory....
 The pages in memory are: 2 0 3 
 
 Current page is:2
-Came hereeeee
 2 is already present in the main memory....
 The pages in memory are: 0 3 2 
 
@@ -59,7 +55,6 @@ Current page is:1
 The pages in memory are: 3 2 1 
 
 Current page is:2
-Came hereeeee
 2 is already present in the main memory....
 The pages in memory are: 3 1 2 
 
@@ -68,7 +63,6 @@ Current page is:0
 The pages in memory are: 1 2 0 
 
 Current page is:1
-Came hereeeee
 1 is already present in the main memory....
 The pages in memory are: 2 0 1 
 
@@ -77,12 +71,10 @@ Current page is:7
 The pages in memory are: 0 1 7 
 
 Current page is:0
-Came hereeeee
 0 is already present in the main memory....
 The pages in memory are: 1 7 0 
 
 Current page is:1
-Came hereeeee
 1 is already present in the main memory....
 The pages in memory are: 7 0 1 
 

@@ -97,7 +97,6 @@ int deleteFromFrame(FrameList *frame,lptr *P) {
         flag=true;
         frame->f=frame->f->right;
     }
-    printf("Came hereeeee\n");
     int ans = removeLLNode(P);
     if (frame->f == NULL) {
         frame->r = NULL;

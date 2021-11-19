@@ -62,7 +62,7 @@ void printPagesInMemory(int frame[],int size,FILE *outputFile){
     for(int i=0;i<size;i++){
         fprintf(outputFile,"%d ",frame[i]);
     }
-    fprintf(outputFile,"\n");
+    fprintf(outputFile,"\n\n");
 }
 void getAllPages(int allPages[],int noOfPages,FILE *inputFile){
     for(int i=0;i<noOfPages;i++){
@@ -111,7 +111,7 @@ int calculateNoOfPages(FILE *inputFile){
 }
 int main(int argc,char *argv[]){
     if(argc!=3){
-        printf("The input format is ./lru <input-file> <output-file>\n");
+        printf("The input format is ./optimised <input-file> <output-file>\n");
         exit(0);
     }
     FILE *inputFile=getInputFD(argv[1]);
