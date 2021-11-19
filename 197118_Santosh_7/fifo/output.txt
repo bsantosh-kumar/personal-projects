@@ -1,0 +1,81 @@
+Current page is:7
+7 is brought in...
+The pages in memory are: 7 
+
+Current page is:0
+0 is brought in...
+The pages in memory are: 7 0 
+
+Current page is:1
+1 is brought in...
+The pages in memory are: 7 0 1 
+
+Current page is:2
+7 is being removed, and 2 is brought in...
+The pages in memory are: 0 1 2 
+
+Current page is:0
+0 is already present in the main memory....
+The pages in memory are: 0 1 2 
+
+Current page is:3
+0 is being removed, and 3 is brought in...
+The pages in memory are: 1 2 3 
+
+Current page is:0
+1 is being removed, and 0 is brought in...
+The pages in memory are: 2 3 0 
+
+Current page is:4
+2 is being removed, and 4 is brought in...
+The pages in memory are: 3 0 4 
+
+Current page is:2
+3 is being removed, and 2 is brought in...
+The pages in memory are: 0 4 2 
+
+Current page is:3
+0 is being removed, and 3 is brought in...
+The pages in memory are: 4 2 3 
+
+Current page is:0
+4 is being removed, and 0 is brought in...
+The pages in memory are: 2 3 0 
+
+Current page is:3
+3 is already present in the main memory....
+The pages in memory are: 2 3 0 
+
+Current page is:2
+2 is already present in the main memory....
+The pages in memory are: 2 3 0 
+
+Current page is:1
+2 is being removed, and 1 is brought in...
+The pages in memory are: 3 0 1 
+
+Current page is:2
+3 is being removed, and 2 is brought in...
+The pages in memory are: 0 1 2 
+
+Current page is:0
+0 is already present in the main memory....
+The pages in memory are: 0 1 2 
+
+Current page is:1
+1 is already present in the main memory....
+The pages in memory are: 0 1 2 
+
+Current page is:7
+0 is being removed, and 7 is brought in...
+The pages in memory are: 1 2 7 
+
+Current page is:0
+1 is being removed, and 0 is brought in...
+The pages in memory are: 2 7 0 
+
+Current page is:1
+2 is being removed, and 1 is brought in...
+The pages in memory are: 7 0 1 
+
+No of page faults are: 15
