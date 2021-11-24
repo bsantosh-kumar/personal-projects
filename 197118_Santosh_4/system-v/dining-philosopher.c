@@ -21,7 +21,7 @@ void test(int index) {
 }
 void philosopher_function(void *id) {
     int index = *(int *)id;
-    int maxEats = 1;
+    int maxEats = 3;
     while (maxEats) {
         sleep(1);
         printf("%d hungry\n", index);

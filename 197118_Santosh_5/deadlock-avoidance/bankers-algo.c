@@ -468,5 +468,8 @@ int main() {
     kernel_thread_init(&kernelThread, kernelResources, allProcesses, processThreads);
     process_threads_join(processThreads);
     kernel_thread_join(kernelThread);
+    sem_wait(&printLock);
     printf("completed\n");
+    sem_post(&printLock);
+    return 0;
 }
