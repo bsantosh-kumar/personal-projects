@@ -72,27 +72,47 @@ void printProcesses(queue *q) {
         }
         T = T->next;
     }
+    printf("*");
     for (int i = 0; i < M; i++) {
-        if (i == 5 || i == 6) continue;
         maxSizeForFormatting[i] += 2;
-        printf("%*s", maxSizeForFormatting[i], headings[i]);
+        if (i == 5 || i == 6) continue;
+        for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
+            printf("-");
+        }
+        printf("*");
     }
     printf("\n");
     for (int i = 0; i < M; i++) {
         if (i == 5 || i == 6) continue;
-        for (int j = 0; j < maxSizeForFormatting[i]; j++) {
+        printf("|%*s", maxSizeForFormatting[i]-1, headings[i]);
+    }
+    printf("|\n");
+ printf("*");
+    for (int i = 0; i < M; i++) {
+        if (i == 5 || i == 6) continue;
+        for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
             printf("-");
         }
+        printf("*");
     }
     printf("\n");
     T = q->f;
     while (T != NULL) {
         for (int j = 0; j < M; j++) {
             if (j == 5 || j == 6) continue;
-            printf("%*d", maxSizeForFormatting[j], *(T->data->allProperties[j]));
+            printf("|%*d", maxSizeForFormatting[j]-1, *(T->data->allProperties[j]));
         }
         T = T->next;
-        printf("\n");
+        printf("|\n");
+         printf("*");
+        for (int i = 0; i < M; i++) {
+            if (i == 5 || i == 6) continue;
+            for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
+                printf("-");
+            }
+            printf("*");
+        }
+        printf("\n"); 
     }
 }
 bool compareBasedOnDL(void *a, void *b) {

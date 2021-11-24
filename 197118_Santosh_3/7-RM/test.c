@@ -77,7 +77,7 @@ void printProcesses(queue *q) {
     for (int i = 0; i < M; i++) {
         if (i == 5 || i == 6) continue;
         maxSizeForFormatting[i] += 2;
-        printf("%*s", maxSizeForFormatting[i], headings[i]);
+        printf("|%*s", maxSizeForFormatting[i]-1, headings[i]);
     }
     printf("\n");
     for (int i = 0; i < M; i++) {

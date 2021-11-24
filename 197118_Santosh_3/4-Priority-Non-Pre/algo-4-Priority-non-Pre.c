@@ -55,26 +55,44 @@ void printProcesses(processProperties **processes, int noOfProcess) {
             maxSizeForFormatting[i] = max(maxSizeForFormatting[i], noOfDigits(*(processes[i]->allProperties[j])));
         }
     }
+     printf("*");
     for (int i = 0; i < M; i++) {
-        if (i == 4) continue;
-
+        if(i==4) continue;
         maxSizeForFormatting[i] += 2;
-        printf("%*s", maxSizeForFormatting[i], headings[i]);
+        for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
+            printf("-");
+        }
+        printf("*");
     }
     printf("\n");
     for (int i = 0; i < M; i++) {
         if (i == 4) continue;
 
-        for (int j = 0; j < maxSizeForFormatting[i]; j++) {
+        printf("|%*s", maxSizeForFormatting[i]-1, headings[i]);
+    }
+    printf("|\n");
+    printf("*");
+    for (int i = 0; i < M; i++) {
+        if(i==4) continue;
+        for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
             printf("-");
         }
+        printf("*");
     }
     printf("\n");
     for (int i = 0; i < noOfProcess; i++) {
         for (int j = 0; j < M; j++) {
             if (j == 4) continue;
-
-            printf("%*d", maxSizeForFormatting[j], *(processes[i]->allProperties[j]));
+            printf("|%*d", maxSizeForFormatting[j]-1, *(processes[i]->allProperties[j]));
+        }
+        printf("|\n");
+        printf("*");
+        for (int i = 0; i < M; i++) {
+            if(i==4) continue;
+            for (int j = 0; j < maxSizeForFormatting[i]-1; j++) {
+                printf("-");
+            }
+            printf("*");
         }
         printf("\n");
     }
