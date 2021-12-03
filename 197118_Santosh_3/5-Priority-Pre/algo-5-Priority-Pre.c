@@ -113,7 +113,7 @@ void calculateTT(processProperties **processes, int noOfProcess) {
         processes[i]->tt = processes[i]->ct - processes[i]->at;
     }
 }
-void SJFAlgo(processProperties **processes, int noOfProcess) {
+void PriorityPre(processProperties **processes, int noOfProcess) {
     processProperties **heap = malloc((2 * noOfProcess + 1) * sizeof(processProperties *));
     int heapSize = 0;
     int currIndex = 0;
@@ -176,7 +176,7 @@ int main() {
     int noOfProcess = 0;
     takeInput(&processes, "input-Priority-Pre.txt", &noOfProcess);
     qsort(processes, noOfProcess, sizeof(processProperties *), compareBasedOnAT);
-    SJFAlgo(processes, noOfProcess);
+    PriorityPre(processes, noOfProcess);
     printProcesses(processes, noOfProcess);
 
     return 0;

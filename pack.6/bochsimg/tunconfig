@@ -1,0 +1,8 @@
+#!/bin/bash
+/sbin/ifconfig ${1##/*/} hw ether b0:c4:20:00:00:01
+# /sbin/ifconfig ${1##/*/} up promisc
+/sbin/ifconfig ${1##/*/} up 
+# /sbin/ifconfig ${1##/*/} down
+/usr/sbin/brctl addbr br0
+echo "This:${1##/*/}"
+/usr/sbin/brctl addif br0 ${1##/*/}

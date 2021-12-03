@@ -43,6 +43,8 @@
         "*.tcc": "c",
         "new": "c",
         "numeric": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "stdio.h": "c",
+        "cstdio": "c"
     }
 }

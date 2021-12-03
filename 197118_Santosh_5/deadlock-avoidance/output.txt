@@ -2,9 +2,9 @@ Kernel Resources:
 
 index:-1
 Maximum resources
-5 9 9 
+9 8 7 
 Allocated resources
-5 9 9 
+9 8 7 
 Need resources
 0 0 0 
 
@@ -13,173 +13,173 @@ Came here i:0
 
 index:0
 Maximum resources
-5 3 4 
+1 3 3 
 Allocated resources
 0 0 0 
 Need resources
-5 3 4 
+1 3 3 
 
 Came here i:1
 
 
 index:1
 Maximum resources
-3 2 5 
+7 5 5 
 Allocated resources
 0 0 0 
 Need resources
-3 2 5 
+7 5 5 
 
 Came here i:2
 
 
 index:2
 Maximum resources
-5 9 2 
+5 6 6 
 Allocated resources
 0 0 0 
 Need resources
-5 9 2 
+5 6 6 
 
 pid: 0
 Process:0 is requesting resources
 The request being:
-2 3 1 
-pid: 1
-Process:1 is requesting resources
-The request being:
-0 1 1 
+0 3 3 
 pid: 2
 Process:2 is requesting resources
 The request being:
-5 8 1 
+5 3 3 
+pid: 1
+Process:1 is requesting resources
+The request being:
+4 2 2 
 Allocating resources to process:0, The request being:
-2 3 1 
-The need is:3 0 3 
-Allocated[]:2 3 1 
+0 3 3 
+The need is:1 0 0 
+Allocated[]:0 3 3 
 Kernel resources
-3 6 8 
+9 5 4 
 Allocating resources to process:1, The request being:
-0 1 1 
-The need is:3 1 4 
-Allocated[]:0 1 1 
+4 2 2 
+The need is:3 3 3 
+Allocated[]:4 2 2 
 Kernel resources
-3 5 7 
-Process: 1 sleeping for 1
+5 3 2 
 Process: 0 sleeping for 2
-Process: 1 came from sleep
-sum:8
-Process:1 is requesting resources
-The request being:
-3 0 0 
-Allocating resources to process:1, The request being:
-3 0 0 
-The need is:0 1 4 
-Allocated[]:3 1 1 
-Kernel resources
-0 5 7 
-Process: 1 sleeping for 0
-Process: 1 came from sleep
-sum:5
-Process:1 is requesting resources
-The request being:
-0 1 1 
-Allocating resources to process:1, The request being:
-0 1 1 
-The need is:0 0 3 
-Allocated[]:3 2 2 
-Kernel resources
-0 4 6 
 Process: 1 sleeping for 2
+Process: 1 came from sleep
+sum:9
+Process:1 is requesting resources
+The request being:
+3 0 3 
 Process: 0 came from sleep
-sum:6
+sum:1
 Process:0 is requesting resources
 The request being:
-3 0 2 
+1 0 0 
+Allocating resources to process:0, The request being:
+1 0 0 
+The need is:0 0 0 
+Allocated[]:1 3 3 
+Kernel resources
+4 3 2 
+Process: 0 sleeping for 1
+Process: 0 came from sleep
+sum:0
+Terminating the process:0
+Taking all resources from process:0
+With kernel resources:4 3 2 
+Max Res[]=1 3 3 
+Done taking all resources from process:0
+,with kernel resoruces:5 6 5 
+Allocating resources to process:1, The request being:
+3 0 3 
+The need is:0 3 0 
+Allocated[]:7 2 5 
+Kernel resources
+2 6 2 
+Process: 1 sleeping for 0
 Process: 1 came from sleep
 sum:3
 Process:1 is requesting resources
 The request being:
-0 0 3 
+0 3 0 
 Allocating resources to process:1, The request being:
-0 0 3 
+0 3 0 
 The need is:0 0 0 
-Allocated[]:3 2 5 
+Allocated[]:7 5 5 
 Kernel resources
-0 4 3 
+2 3 2 
 Process: 1 sleeping for 0
 Process: 1 came from sleep
 sum:0
 Terminating the process:1
 Taking all resources from process:1
-With kernel resources:0 4 3 
-Max Res[]=3 2 5 
+With kernel resources:2 3 2 
+Max Res[]=7 5 5 
 Done taking all resources from process:1
-,with kernel resoruces:3 6 8 
-Allocating resources to process:0, The request being:
-3 0 2 
-The need is:0 0 1 
+,with kernel resoruces:9 8 7 
+Allocating resources to process:2, The request being:
+5 3 3 
+The need is:0 3 3 
 Allocated[]:5 3 3 
 Kernel resources
-0 6 6 
-Process: 0 sleeping for 2
-Process: 0 came from sleep
-sum:1
-Process:0 is requesting resources
+4 5 4 
+Process: 2 sleeping for 0
+Process: 2 came from sleep
+sum:6
+Process:2 is requesting resources
 The request being:
 0 0 1 
-Allocating resources to process:0, The request being:
+Allocating resources to process:2, The request being:
 0 0 1 
-The need is:0 0 0 
+The need is:0 3 2 
 Allocated[]:5 3 4 
 Kernel resources
-0 6 5 
-Process: 0 sleeping for 0
-Process: 0 came from sleep
-sum:0
-Terminating the process:0
-Taking all resources from process:0
-With kernel resources:0 6 5 
-Max Res[]=5 3 4 
-Done taking all resources from process:0
-,with kernel resoruces:5 9 9 
-Allocating resources to process:2, The request being:
-5 8 1 
-The need is:0 1 1 
-Allocated[]:5 8 1 
-Kernel resources
-0 1 8 
+4 5 3 
 Process: 2 sleeping for 2
+Process: 2 came from sleep
+sum:5
+Process:2 is requesting resources
+The request being:
+0 2 1 
+Allocating resources to process:2, The request being:
+0 2 1 
+The need is:0 1 1 
+Allocated[]:5 5 5 
+Kernel resources
+4 3 2 
+Process: 2 sleeping for 0
 Process: 2 came from sleep
 sum:2
 Process:2 is requesting resources
 The request being:
-0 1 0 
+0 0 1 
 Allocating resources to process:2, The request being:
-0 1 0 
-The need is:0 0 1 
-Allocated[]:5 9 1 
+0 0 1 
+The need is:0 1 0 
+Allocated[]:5 5 6 
 Kernel resources
-0 0 8 
-Process: 2 sleeping for 0
+4 3 1 
+Process: 2 sleeping for 1
 Process: 2 came from sleep
 sum:1
 Process:2 is requesting resources
 The request being:
-0 0 1 
+0 1 0 
 Allocating resources to process:2, The request being:
-0 0 1 
+0 1 0 
 The need is:0 0 0 
-Allocated[]:5 9 2 
+Allocated[]:5 6 6 
 Kernel resources
-0 0 7 
+4 2 1 
 Process: 2 sleeping for 0
 Process: 2 came from sleep
 sum:0
 Terminating the process:2
 Taking all resources from process:2
-With kernel resources:0 0 7 
-Max Res[]=5 9 2 
+With kernel resources:4 2 1 
+Max Res[]=5 6 6 
 Done taking all resources from process:2
-,with kernel resoruces:5 9 9 
+,with kernel resoruces:9 8 7 
 completed

@@ -1,0 +1,400 @@
+Archive member included to satisfy reference by file (symbol)
+
+../lib/lib.a(syscallib.o)     seive.o (exit)
+../lib/lib.a(vsprintf.o)      seive.o (printf)
+../lib/lib.a(mathfunc.o)      ../lib/lib.a(vsprintf.o) (modf)
+../lib/lib.a(strtol.o)        seive.o (atoi)
+../lib/lib.a(library.o)       ../lib/lib.a(vsprintf.o) (memcpy)
+../lib/lib.a(malloc.o)        ../lib/lib.a(library.o) (malloc)
+../lib/lib.a(string.o)        ../lib/lib.a(vsprintf.o) (strlen)
+../lib/lib.a(pow.o)           ../lib/lib.a(mathfunc.o) (_abs)
+../lib/lib.a(klib.o)          ../lib/lib.a(malloc.o) (bzero)
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 seive.o
+ .group         0x0000000000000000        0x8 ../lib/lib.a(vsprintf.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(vsprintf.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(vsprintf.o)
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 ../lib/lib.a(vsprintf.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(mathfunc.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(mathfunc.o)
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 ../lib/lib.a(mathfunc.o)
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 ../lib/lib.a(mathfunc.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(strtol.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(strtol.o)
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 ../lib/lib.a(strtol.o)
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 ../lib/lib.a(strtol.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(library.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(library.o)
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 ../lib/lib.a(library.o)
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 ../lib/lib.a(library.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(malloc.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(malloc.o)
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 ../lib/lib.a(malloc.o)
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 ../lib/lib.a(malloc.o)
+ .group         0x0000000000000000        0x8 ../lib/lib.a(string.o)
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 ../lib/lib.a(string.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000020000000                . = 0x20000000
+
+.text           0x0000000020000000     0x4ee4
+                0x0000000020000000        0x4 LONG 0x47b853
+                0x0000000020000004        0x4 LONG 0xe3890000
+                0x0000000020000008        0x4 LONG 0x8c381
+                0x000000002000000c        0x4 LONG 0x30cd0000
+ *(.text)
+ .text          0x0000000020000010       0xe7 seive.o
+                0x0000000020000010                strike_factors
+ *fill*         0x00000000200000f7        0x9 
+ .text          0x0000000020000100      0x3dc ../lib/lib.a(syscallib.o)
+                0x0000000020000100                open
+                0x000000002000010b                close
+                0x0000000020000116                read
+                0x0000000020000121                write
+                0x000000002000012c                lseek
+                0x0000000020000137                mkdir
+                0x0000000020000142                rmdir
+                0x000000002000014d                chdir
+                0x0000000020000158                creat
+                0x0000000020000163                rename
+                0x000000002000016e                opendir_internal
+                0x0000000020000179                closedir_internal
+                0x0000000020000184                readdir
+                0x000000002000018f                stat
+                0x000000002000019a                unlink
+                0x00000000200001a5                chmod
+                0x00000000200001b0                dup
+                0x00000000200001bb                dup2
+                0x00000000200001c6                setcursor
+                0x00000000200001d1                getchar
+                0x00000000200001dc                getchare
+                0x00000000200001e7                getscanchar
+                0x00000000200001f2                putchar
+                0x00000000200001fd                puts
+                0x0000000020000229                readblocks
+                0x0000000020000234                writeblocks
+                0x000000002000023f                sync
+                0x000000002000024a                txpkt
+                0x0000000020000255                rxpkt
+                0x0000000020000260                tsleep
+                0x000000002000026b                tsendto
+                0x0000000020000276                exectask
+                0x0000000020000281                trecvfrom
+                0x000000002000028c                exit
+                0x0000000020000297                pthread_create
+                0x00000000200002a2                pthread_exit
+                0x00000000200002ad                pthread_join
+                0x00000000200002b8                pthread_detach
+                0x00000000200002c3                pthread_yield
+                0x00000000200002ce                pthread_mutex_init
+                0x00000000200002d9                pthread_mutex_trylock
+                0x00000000200002e4                pthread_mutex_lock
+                0x00000000200002ef                pthread_mutex_unlock
+                0x00000000200002fa                pthread_cond_init
+                0x0000000020000305                pthread_cond_wait
+                0x0000000020000310                pthread_cond_signal
+                0x000000002000031b                pthread_cond_broadcast
+                0x0000000020000326                pthread_barrier_init
+                0x0000000020000331                pthread_barrier_wait
+                0x000000002000033c                socket
+                0x0000000020000347                bind
+                0x0000000020000352                recv
+                0x000000002000035d                recvfrom
+                0x0000000020000368                send
+                0x0000000020000373                sendto
+                0x000000002000037e                connect
+                0x0000000020000389                accept
+                0x0000000020000394                listen
+                0x000000002000039f                kill
+                0x00000000200003aa                getprocinfo
+                0x00000000200003b5                getpids
+                0x00000000200003c0                sem_init
+                0x00000000200003cb                sem_destroy_internal
+                0x00000000200003d6                sem_openv
+                0x00000000200003e1                sem_close_internal
+                0x00000000200003ec                sem_unlink
+                0x00000000200003f7                sem_wait
+                0x0000000020000402                sem_trywait
+                0x000000002000040d                sem_timedwait
+                0x0000000020000418                sem_post
+                0x0000000020000423                sem_getvalue
+                0x000000002000042e                time
+                0x0000000020000439                pthread_self
+                0x0000000020000444                brk_internal
+                0x000000002000044c                gettsc
+                0x0000000020000454                memstatus
+                0x000000002000045c                _wait
+                0x0000000020000464                pageinfo
+                0x000000002000046c                machid
+                0x0000000020000474                getcharf
+                0x000000002000047c                ungetcharf
+                0x0000000020000484                broadcast
+                0x000000002000048c                primalloc_internal
+                0x0000000020000494                prifree_internal
+                0x000000002000049c                lscr
+                0x00000000200004a4                gotoscr
+                0x00000000200004ac                marktsc
+                0x00000000200004b4                timed
+                0x00000000200004bc                pthread_mutex_destroy
+                0x00000000200004c4                make_intr
+ .text          0x00000000200004dc     0x19a9 ../lib/lib.a(vsprintf.o)
+                0x0000000020001480                vsprintf
+                0x0000000020001a2e                sprintf
+                0x0000000020001a67                printf
+                0x0000000020001df9                fcvtbuf
+                0x0000000020001e3f                ecvtbuf
+ .text          0x0000000020001e85      0xc5d ../lib/lib.a(mathfunc.o)
+                0x0000000020001e85                abs
+                0x0000000020001ebd                modf
+                0x0000000020001f0f                floor
+                0x0000000020002015                pow
+                0x0000000020002167                log
+                0x00000000200021ad                ldexp
+                0x00000000200021f2                exp
+                0x000000002000235b                sqrt
+                0x00000000200023ec                atan2
+                0x0000000020002676                atan
+                0x00000000200026d2                asin
+                0x00000000200027a9                acos
+                0x0000000020002809                cos
+                0x0000000020002855                sin
+                0x0000000020002a60                tan
+                0x0000000020002aad                fabs
+ .text          0x0000000020002ae2      0x437 ../lib/lib.a(strtol.o)
+                0x0000000020002dd5                strtol
+                0x0000000020002dfc                strtoul
+                0x0000000020002e23                atol
+                0x0000000020002ef9                atoi
+ .text          0x0000000020002f19      0x9e3 ../lib/lib.a(library.o)
+                0x0000000020002f19                getc
+                0x0000000020002f50                fgetc
+                0x0000000020002f70                ungetc
+                0x0000000020002fa2                gets
+                0x0000000020003012                fgets
+                0x0000000020003096                fopen
+                0x00000000200031b4                fclose
+                0x0000000020003201                memcpy
+                0x0000000020003239                memmove
+                0x0000000020003261                readline
+                0x000000002000369e                htonl
+                0x00000000200036ad                htons
+                0x00000000200036ca                err_dump
+                0x0000000020003702                inet_addr
+                0x00000000200037b0                perror
+                0x00000000200037dc                fork
+                0x00000000200037ec                getenv
+                0x00000000200038d9                abort
+ .text          0x00000000200038fc      0xace ../lib/lib.a(malloc.o)
+                0x00000000200038fc                ucheck_release_core
+                0x00000000200039a4                uinsert_avail_node
+                0x0000000020003bbe                udelete_avail_node
+                0x0000000020003c4e                ucreate_mem_list_node
+                0x0000000020003dd3                malloc
+                0x00000000200040c2                free
+                0x00000000200041af                brk
+                0x00000000200041fe                primalloc
+                0x000000002000424d                prifree
+                0x00000000200042a0                calloc
+                0x00000000200042f3                realloc
+ .text          0x00000000200043ca      0x713 ../lib/lib.a(string.o)
+                0x00000000200043ca                strcpy
+                0x0000000020004437                strcat
+                0x00000000200044b8                strcmp
+                0x0000000020004549                strlen
+                0x000000002000457e                strnlen
+                0x00000000200045bf                strncpy
+                0x0000000020004638                strncat
+                0x00000000200046c4                strncmp
+                0x0000000020004764                toupper
+                0x0000000020004795                tolower
+                0x00000000200047c6                isspace
+                0x00000000200047f1                isalpha
+                0x0000000020004823                isnum
+                0x0000000020004847                isdigit
+                0x000000002000486b                isxdigit
+                0x00000000200048ab                strstr
+                0x00000000200048fd                strchr
+                0x000000002000493e                strcasecmp
+                0x0000000020004a06                strncasecmp
+ *fill*         0x0000000020004add        0x3 
+ .text          0x0000000020004ae0       0xc1 ../lib/lib.a(pow.o)
+                0x0000000020004ae0                pow_internal
+                0x0000000020004b19                _abs
+                0x0000000020004b24                round
+                0x0000000020004b2f                madd
+                0x0000000020004b3c                ylog2x
+                0x0000000020004b4b                ceil
+                0x0000000020004b5f                p2xminus1
+                0x0000000020004b6a                p2xstary
+                0x0000000020004b85                frexp
+ *fill*         0x0000000020004ba1        0xf 
+ .text          0x0000000020004bb0       0xdd ../lib/lib.a(klib.o)
+                0x0000000020004bb0                in_byte
+                0x0000000020004bbb                in_word
+                0x0000000020004bc7                out_byte
+                0x0000000020004bd5                out_word
+                0x0000000020004be4                bzero
+                0x0000000020004c05                memset
+                0x0000000020004c28                memcmp
+                0x0000000020004c64                bcopy
+ *(.fixup)
+ *(.kstrtab)
+ *(.rodata)
+ *fill*         0x0000000020004c8d        0x3 
+ .rodata        0x0000000020004c90      0x188 ../lib/lib.a(vsprintf.o)
+ .rodata        0x0000000020004e18       0x50 ../lib/lib.a(mathfunc.o)
+ .rodata        0x0000000020004e68       0x26 ../lib/lib.a(library.o)
+ *fill*         0x0000000020004e8e        0x2 
+ .rodata        0x0000000020004e90       0x54 ../lib/lib.a(malloc.o)
+
+.text.startup   0x0000000020004ef0      0x1fc
+ .text.startup  0x0000000020004ef0      0x1fc seive.o
+                0x0000000020004ef0                main
+
+.text.__x86.get_pc_thunk.bx
+                0x00000000200050ec        0x4
+ .text.__x86.get_pc_thunk.bx
+                0x00000000200050ec        0x4 seive.o
+                0x00000000200050ec                __x86.get_pc_thunk.bx
+
+.iplt           0x00000000200050f0        0x0
+ .iplt          0x00000000200050f0        0x0 seive.o
+
+.text.__x86.get_pc_thunk.ax
+                0x00000000200050f0        0x4
+ .text.__x86.get_pc_thunk.ax
+                0x00000000200050f0        0x4 ../lib/lib.a(vsprintf.o)
+                0x00000000200050f0                __x86.get_pc_thunk.ax
+
+.text.__x86.get_pc_thunk.cx
+                0x00000000200050f4        0x4
+ .text.__x86.get_pc_thunk.cx
+                0x00000000200050f4        0x4 ../lib/lib.a(vsprintf.o)
+                0x00000000200050f4                __x86.get_pc_thunk.cx
+
+.rodata.str1.1  0x00000000200050f8       0x15
+ .rodata.str1.1
+                0x00000000200050f8       0x15 seive.o
+
+.rodata.str1.4  0x0000000020005110       0x5b
+ .rodata.str1.4
+                0x0000000020005110       0x5b seive.o
+
+.eh_frame       0x000000002000516c     0x126c
+ .eh_frame      0x000000002000516c       0xc8 seive.o
+ .eh_frame      0x0000000020005234      0x3e0 ../lib/lib.a(vsprintf.o)
+                                        0x40c (size before relaxing)
+ .eh_frame      0x0000000020005614      0x3ec ../lib/lib.a(mathfunc.o)
+                                        0x42c (size before relaxing)
+ .eh_frame      0x0000000020005a00       0xf0 ../lib/lib.a(strtol.o)
+                                        0x130 (size before relaxing)
+ .eh_frame      0x0000000020005af0      0x3a8 ../lib/lib.a(library.o)
+                                        0x3e8 (size before relaxing)
+ .eh_frame      0x0000000020005e98      0x310 ../lib/lib.a(malloc.o)
+                                        0x350 (size before relaxing)
+ .eh_frame      0x00000000200061a8      0x230 ../lib/lib.a(string.o)
+                                        0x25c (size before relaxing)
+
+.rel.dyn        0x00000000200063d8        0x0
+ .rel.got       0x00000000200063d8        0x0 seive.o
+ .rel.iplt      0x00000000200063d8        0x0 seive.o
+                0x0000000024000000                . = 0x24000000
+
+.data           0x0000000024000000      0x1a6
+ *(.data)
+ .data          0x0000000024000000      0x100 seive.o
+                0x0000000024000000                args
+ .data          0x0000000024000100        0x0 ../lib/lib.a(vsprintf.o)
+ .data          0x0000000024000100       0x98 ../lib/lib.a(mathfunc.o)
+ .data          0x0000000024000198        0x0 ../lib/lib.a(strtol.o)
+ .data          0x0000000024000198        0x0 ../lib/lib.a(library.o)
+ .data          0x0000000024000198        0x0 ../lib/lib.a(malloc.o)
+ .data          0x0000000024000198        0x0 ../lib/lib.a(string.o)
+ .data          0x0000000024000198        0x8 ../lib/lib.a(pow.o)
+ .data          0x00000000240001a0        0x6 ../lib/lib.a(klib.o)
+
+.got            0x00000000240001a8        0x0
+ .got           0x00000000240001a8        0x0 seive.o
+
+.got.plt        0x00000000240001a8        0xc
+ .got.plt       0x00000000240001a8        0xc seive.o
+                0x00000000240001a8                _GLOBAL_OFFSET_TABLE_
+
+.igot.plt       0x00000000240001b4        0x0
+ .igot.plt      0x00000000240001b4        0x0 seive.o
+
+.data.rel.local
+                0x00000000240001b4        0x8
+ .data.rel.local
+                0x00000000240001b4        0x8 ../lib/lib.a(vsprintf.o)
+
+.bss            0x00000000240001c0   0x4000e4
+ *(.bss)
+ .bss           0x00000000240001c0   0x400050 seive.o
+                0x00000000240001c0                mut
+                0x00000000240001e4                barr
+                0x0000000024000200                flags
+                0x0000000024400204                N
+                0x0000000024400208                P
+                0x000000002440020c                SQRTN
+ .bss           0x0000000024400210        0x0 ../lib/lib.a(vsprintf.o)
+ .bss           0x0000000024400210        0x0 ../lib/lib.a(mathfunc.o)
+ .bss           0x0000000024400210        0x4 ../lib/lib.a(strtol.o)
+                0x0000000024400210                errno
+ .bss           0x0000000024400214        0x0 ../lib/lib.a(library.o)
+ *fill*         0x0000000024400214        0xc 
+ .bss           0x0000000024400220       0x84 ../lib/lib.a(malloc.o)
+                0x0000000024400220                umem_info
+                0x000000002440022c                enddataaddr
+                0x0000000024400240                __malloc_mutex
+                0x0000000024400280                __brk_mutex
+ .bss           0x00000000244002a4        0x0 ../lib/lib.a(string.o)
+ *(COMMON)
+LOAD seive.o
+LOAD ../lib/lib.a
+OUTPUT(seive elf32-i386)
+
+.comment        0x0000000000000000       0x1f
+ .comment       0x0000000000000000       0x1f seive.o
+                                         0x20 (size before relaxing)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(vsprintf.o)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(mathfunc.o)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(strtol.o)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(library.o)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(malloc.o)
+ .comment       0x000000000000001f       0x20 ../lib/lib.a(string.o)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 seive.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(vsprintf.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(mathfunc.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(strtol.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(library.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(malloc.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 ../lib/lib.a(string.o)
